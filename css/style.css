@@ -1,0 +1,2192 @@
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../fonts/source-sans-3-variable.woff2") format("woff2-variations");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-brand: #0B3CC1;
+  --color-accent: #D10015; /* rosso del marchio, letto da img/logo-FASE-1.png */
+  --color-ink: #111;
+  --color-muted: #606060; /* tarato per restare a 4,5:1 sul grigio qui sotto */
+  --color-surface: #DCDCDC; /* fondo delle foto di prodotto: vedi img/su-grigio/ */
+  --color-surface-hover: #D0D0D0;
+  --color-page: #FFF;
+  --color-line: #CCC;
+  --color-dot-idle: #BDBDBD;
+
+  /* Scala tipografica: un gradino per ruolo, gli stessi in ogni sezione e
+     pagina. I titoli crescono ridefinendo il token nei due breakpoint, non
+     con una regola per ciascun titolo. */
+  --font-title-1: 30px; /* titolo di pagina e di slide */
+  --font-title-2: 24px; /* titolo di sezione */
+  --font-title-3: 20px; /* titolo di blocco */
+  --font-title-4: 17px; /* titolo di card */
+  --font-lead: 17px; /* paragrafo d'apertura */
+  --font-body: 17px;
+  --font-small: 15px;
+  --font-tiny: 14px;
+  --font-label: 13px; /* etichette maiuscole */
+
+  --leading-title: 1.2;
+  --leading-body: 1.6;
+  --leading-read: 1.7; /* blocchi di prosa lunga */
+  --tracking-label: 0.12em;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --font-sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-slide: 400ms;
+  --duration-overlay: 320ms;
+  --duration-hover: 160ms;
+  --duration-flip: 640ms;
+  /* Parte piano e si posa: nessun rimbalzo, il giro deve leggersi meccanico. */
+  --easing-flip: cubic-bezier(0.45, 0.05, 0.25, 1);
+
+  --page-gutter: var(--space-5);
+  --page-max-width: 1440px;
+  --logo-height: 40px;
+  --carousel-gap: var(--space-4);
+  --carousel-peek: 20px;
+  --carousel-padding-block: var(--space-10);
+  --hero-ratio: 16 / 9;
+  --shadow-header: 0 1px 4px rgba(0, 0, 0, 0.12);
+  --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Gli ancoraggi scorrono dolcemente e si fermano sotto l'intestazione fissa.
+   Con prefers-reduced-motion la regola più in basso riporta il salto secco. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin-top: var(--space-20);
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+figure {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--font-body);
+  font-weight: 300;
+  line-height: var(--leading-body);
+  -webkit-text-size-adjust: 100%;
+}
+
+body.is-nav-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+svg {
+  display: block;
+}
+
+address {
+  font-style: normal;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 200;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-ink);
+  color: var(--color-page);
+  transform: translateY(-200%);
+  transition: transform var(--duration-hover) var(--easing-standard);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.button-accent {
+  display: inline-block;
+  padding: var(--space-4) var(--space-8);
+  background: var(--color-accent);
+  color: var(--color-page);
+  font-size: var(--font-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color var(--duration-hover) var(--easing-standard);
+}
+
+.button-accent:hover,
+.button-accent:focus-visible {
+  background: var(--color-ink);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-brand);
+  font-size: var(--font-small);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.text-link svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--duration-hover) var(--easing-standard);
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  text-decoration: underline;
+}
+
+.text-link:hover svg {
+  transform: translateX(var(--space-1));
+}
+
+.disclosure {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-4) 0;
+  text-align: left;
+}
+
+.disclosure__chevron {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-hover) var(--easing-standard);
+}
+
+.disclosure[aria-expanded="true"] .disclosure__chevron {
+  transform: rotate(180deg);
+}
+
+/* Header */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--color-page);
+  transition: box-shadow var(--duration-hover) var(--easing-standard);
+}
+
+.site-header.is-scrolled {
+  box-shadow: var(--shadow-header);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--space-3) var(--page-gutter);
+}
+
+.site-header__logo {
+  display: block;
+  flex: 0 0 auto;
+  height: var(--logo-height);
+}
+
+.site-header__marchio {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+.scroll-progress {
+  margin-right: auto;
+  color: var(--color-muted);
+  font-size: var(--font-small);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.hamburger__icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Overlay menu */
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration-overlay);
+}
+
+.nav-overlay.is-open {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.nav-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--duration-overlay) var(--easing-standard);
+}
+
+.nav-overlay.is-open .nav-overlay__backdrop {
+  opacity: 1;
+}
+
+.nav-overlay__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  padding: 0 var(--page-gutter) var(--space-16);
+  background: var(--color-page);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateX(100%);
+  transition: transform var(--duration-overlay) var(--easing-standard);
+}
+
+.nav-overlay.is-open .nav-overlay__panel {
+  transform: translateX(0);
+}
+
+.nav-overlay__bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-3) 0;
+}
+
+.nav-overlay__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.nav-overlay__close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-menu__item {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.nav-menu__item .disclosure,
+.nav-menu__link {
+  font-size: var(--font-title-3);
+  font-weight: 700;
+}
+
+.nav-menu__link {
+  display: block;
+  padding: var(--space-4) 0;
+  text-decoration: none;
+}
+
+.nav-menu__link:hover,
+.nav-menu__link:focus-visible {
+  color: var(--color-brand);
+}
+
+.nav-menu__sublist {
+  padding-bottom: var(--space-4);
+}
+
+.nav-menu__sublist a {
+  display: block;
+  padding: var(--space-2) 0;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.nav-menu__sublist a:hover,
+.nav-menu__sublist a:focus-visible {
+  color: var(--color-brand);
+}
+
+/* Carousel — shared shell for every instance */
+
+.section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--carousel-padding-block) var(--page-gutter);
+}
+
+.carousel--is-static .carousel__controls,
+.carousel--is-static .carousel__frecce {
+  display: none;
+}
+
+.carousel__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+.carousel__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-accent);
+  transition:
+    color var(--duration-hover) var(--easing-standard),
+    opacity var(--duration-hover) var(--easing-standard);
+}
+
+.carousel__arrow:hover:not(:disabled),
+.carousel__arrow:focus-visible {
+  color: var(--color-ink);
+}
+
+.carousel__arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.carousel__arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.carousel__dots {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.carousel__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 44px;
+}
+
+.carousel__dot::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: var(--color-dot-idle);
+  transition: background-color var(--duration-hover) var(--easing-standard);
+}
+
+.carousel__dot:hover::before {
+  background: var(--color-muted);
+}
+
+.carousel__dot[aria-current="true"]::before {
+  background: var(--color-accent);
+}
+
+/* Hero carousel */
+
+/* Grigio unico per le foto di prodotto: --color-surface, lo stesso del footer.
+   Va sia sotto la sezione sia sotto lo scatto, così il bordo della foto sparisce
+   e il prodotto non galleggia su una pagina bianca. */
+
+.fascia-prodotto {
+  background: var(--color-surface);
+}
+
+.fascia-punteggiata {
+  background-image: radial-gradient(circle, var(--color-surface) 1.4px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* Foto, testo e riga di controllo formano un'unica colonna centrata a ogni
+   larghezza. Le frecce affiancano i puntini: la fascia dei controlli è una riga
+   a tre colonne e display:contents scioglie il contenitore delle frecce, così i
+   due bottoni ne diventano celle senza doverli duplicare nel markup. */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  row-gap: var(--space-6);
+  align-items: center;
+}
+
+.hero > .carousel__viewport {
+  grid-area: 1 / 1 / 2 / 4;
+}
+
+.hero > .carousel__frecce {
+  display: contents;
+}
+
+.hero > .carousel__controls {
+  grid-area: 2 / 2;
+  margin-top: 0;
+}
+
+.carousel__frecce [data-carousel-previous] {
+  grid-area: 2 / 1;
+  justify-self: end;
+}
+
+.carousel__frecce [data-carousel-next] {
+  grid-area: 2 / 3;
+  justify-self: start;
+}
+
+.carousel__frecce .carousel__arrow {
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: var(--color-page);
+}
+
+.carousel__frecce .carousel__arrow:hover:not(:disabled),
+.carousel__frecce .carousel__arrow:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-page);
+}
+
+.hero__track {
+  display: grid;
+}
+
+.hero__slide,
+.testata {
+  display: grid;
+  align-content: start;
+  gap: var(--space-6);
+}
+
+.hero__slide {
+  position: relative;
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-slide) var(--easing-standard),
+    visibility 0s linear var(--duration-slide);
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.hero__content,
+.testata__testo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+/* La testata di categoria sta sulla stessa fascia grigia dell'hero: il fondo
+   cotto nelle foto coincide, quindi il bordo dello scatto non si vede. */
+
+.testata {
+  padding-bottom: var(--space-10);
+}
+
+.testata .pagina__sottotitolo {
+  margin-bottom: var(--space-2);
+}
+
+/* La foto del prodotto è alta quanto basta: con object-fit contain e il fondo
+   che coincide col grigio della fascia si rimpicciolisce senza tagli, e la banda
+   dei punti chiave resta sopra la piega anche su un portatile 1366x768. */
+
+.testata__foto {
+  aspect-ratio: 3 / 2;
+  max-height: 340px;
+}
+
+.testata--prodotto {
+  padding-block: var(--space-8);
+}
+
+.testata__azioni {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.hero__title {
+  font-size: var(--font-title-1);
+  line-height: var(--leading-title);
+  letter-spacing: -0.01em;
+}
+
+.hero__text {
+  color: var(--color-muted);
+  font-size: var(--font-lead);
+}
+
+/* Comparsa allo scroll: lo stato nascosto vale solo se il JS è vivo, così senza
+   JS il contenuto resta leggibile invece di sparire. */
+
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--space-6));
+  transition:
+    opacity var(--duration-slide) var(--easing-standard),
+    transform var(--duration-slide) var(--easing-standard);
+}
+
+.js-reveal [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Soluzioni: due tessere sul modello del sito di riferimento. Il grigio non
+   parte dall'inizio della fascia ma più in basso, così sopra le tessere resta
+   il bianco della sezione precedente e sono loro a scavalcare il bordo del
+   grigio. Lo stacco è calcolato, non a occhio: padding della sezione più la
+   porzione di tessera che deve restare sul bianco. */
+
+.fascia-soluzioni {
+  --soluzioni-stacco: calc(var(--carousel-padding-block) + var(--space-16));
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-page) 0 var(--soluzioni-stacco),
+    var(--color-surface) var(--soluzioni-stacco) 100%
+  );
+}
+
+.soluzioni__lista {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.soluzione {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: var(--color-page);
+  text-decoration: none;
+}
+
+.soluzione__media {
+  aspect-ratio: var(--hero-ratio);
+}
+
+.soluzione__velo {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  opacity: 0;
+  transition: opacity var(--duration-slide) var(--easing-standard);
+}
+
+.soluzione:hover .soluzione__velo,
+.soluzione:focus-visible .soluzione__velo {
+  opacity: 0.9;
+}
+
+.soluzione__testo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+}
+
+/* La sfumatura tiene leggibile il nome sulle foto chiare finché il velo è via. */
+
+.soluzione__testo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0) 62%);
+  transition: opacity var(--duration-slide) var(--easing-standard);
+}
+
+.soluzione:hover .soluzione__testo::before,
+.soluzione:focus-visible .soluzione__testo::before {
+  opacity: 0;
+}
+
+.soluzione__nome,
+.soluzione__azione {
+  position: relative;
+  transition:
+    opacity var(--duration-slide) var(--easing-standard),
+    transform var(--duration-slide) var(--easing-standard);
+}
+
+.soluzione__nome {
+  font-size: var(--font-title-2);
+  font-weight: 700;
+  transform: translateY(var(--space-12));
+}
+
+.soluzione__azione {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-small);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(var(--space-6));
+}
+
+.soluzione__azione svg {
+  width: 18px;
+  height: 18px;
+}
+
+.soluzione:hover .soluzione__nome,
+.soluzione:focus-visible .soluzione__nome,
+.soluzione:hover .soluzione__azione,
+.soluzione:focus-visible .soluzione__azione {
+  opacity: 1;
+  transform: none;
+}
+
+.chiusura {
+  padding-top: 0;
+}
+
+/* Riquadri di Applicazioni e Settori: card che si girano sull'asse verticale.
+   Davanti foto e nome, dietro il testo. Stanno sul campo puntinato, che dà
+   fondo alle facce bianche.
+
+   L'altezza la detta la faccia anteriore, che è l'unica in flusso normale; il
+   retro è sovrapposto a inset: 0 e prende la stessa misura. La griglia stira
+   tutte le card alla più alta della riga, quindi le facce restano allineate. */
+
+.riquadri {
+  display: grid;
+  gap: var(--carousel-gap);
+}
+
+.riquadro {
+  perspective: 1600px;
+}
+
+/* L'altezza non la decide la foto ma il testo più lungo del retro, misurato
+   alla colonna più stretta in cui la card compare (due colonne a 768px, dove
+   la card sta in 356px). Sotto quella misura il retro verrebbe tagliato. */
+
+.riquadro__carta {
+  position: relative;
+  height: 100%;
+  min-height: 440px;
+  transform-style: preserve-3d;
+  transition: transform var(--duration-flip) var(--easing-flip);
+}
+
+.riquadro.is-girata .riquadro__carta {
+  transform: rotateY(180deg);
+}
+
+/* La faccia voltata non viene disegnata: è questo che rende il movimento un
+   giro e non una dissolvenza fra due immagini sovrapposte. */
+
+.riquadro__faccia {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
+  backface-visibility: hidden;
+  transition: box-shadow var(--duration-hover) var(--easing-standard);
+}
+
+.riquadro__faccia--retro {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+.riquadro:hover .riquadro__faccia,
+.riquadro:focus-within .riquadro__faccia {
+  box-shadow: var(--shadow-panel);
+}
+
+/* Il bottone non avvolge il contenuto: lo copre. Così il click prende tutta la
+   superficie e insieme titoli e paragrafi restano fuori da <button>, che può
+   contenere solo testo semplice. */
+
+.riquadro__apri {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* overflow: hidden sulla faccia taglierebbe il contorno di fuoco disegnato in
+   fuori: qui lo si porta all'interno. */
+
+.riquadro__apri:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: -4px;
+}
+
+/* La foto prende quel che resta dopo il nome: così l'altezza in più che serve
+   al retro diventa immagine e non spazio vuoto. Il taglio lo fa object-fit,
+   ereditato da .media. */
+
+.riquadro__media {
+  flex: 1;
+  min-height: 0;
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.riquadro:hover .riquadro__media {
+  transform: scale(1.04);
+}
+
+.riquadro__nome {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-5);
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Il segno sta nell'angolo, sopra la foto: dice che la card si gira senza
+   aggiungere una scritta. Al passaggio del mouse si riempie di rosso. */
+
+.riquadro__segno {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8);
+  height: var(--space-8);
+  background: var(--color-page);
+  color: var(--color-accent);
+  transition:
+    background var(--duration-hover) var(--easing-standard),
+    color var(--duration-hover) var(--easing-standard);
+}
+
+.riquadro__segno svg {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.riquadro:hover .riquadro__segno,
+.riquadro:focus-within .riquadro__segno {
+  background: var(--color-accent);
+  color: var(--color-page);
+}
+
+.riquadro__retro {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+}
+
+.riquadro__titolo {
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.riquadro__titolo::after {
+  content: "";
+  display: block;
+  width: var(--space-8);
+  height: 2px;
+  margin-top: var(--space-3);
+  background: var(--color-accent);
+}
+
+.riquadro__testo {
+  margin-top: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+  line-height: var(--leading-body);
+}
+
+/* Contatti: introduzione e recapiti a sinistra, modulo a destra. Una colonna
+   sola su telefono. Riusa scheda__titolo, text-link, button-accent e i token. */
+
+.contatti {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.contatti__intro {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.contatti__testo {
+  max-width: 60ch;
+  color: var(--color-muted);
+}
+
+.recapiti {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+
+.recapiti__ragione {
+  display: block;
+  font-weight: 700;
+}
+
+.recapiti__blocco {
+  line-height: var(--leading-read);
+}
+
+.recapiti__voci {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.recapiti__voci li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.recapiti__icona {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent);
+}
+
+/* Modulo */
+
+.modulo {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  padding: var(--space-8);
+  background: var(--color-surface);
+}
+
+.modulo__coppia {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.modulo__campo {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.modulo__etichetta {
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.modulo__facoltativo {
+  color: var(--color-muted);
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.modulo__controllo {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line);
+  background: var(--color-page);
+  color: inherit;
+  font: inherit;
+}
+
+.modulo__controllo[aria-invalid="true"] {
+  border-color: var(--color-accent);
+}
+
+.modulo__aiuto {
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+}
+
+.modulo__errore {
+  color: var(--color-accent);
+  font-size: var(--font-tiny);
+  font-weight: 700;
+}
+
+.modulo__consenso {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--font-small);
+}
+
+.modulo__consenso .modulo__errore {
+  grid-column: 2;
+}
+
+.modulo__esito:empty {
+  display: none;
+}
+
+.modulo__esito {
+  padding: var(--space-4);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-page);
+  font-size: var(--font-small);
+}
+
+/* Systems + machines (shared card carousel) */
+
+.systems__title {
+  margin-bottom: var(--space-8);
+  font-size: var(--font-title-2);
+  line-height: var(--leading-title);
+  text-align: center;
+}
+
+.cards__track {
+  display: flex;
+  gap: var(--carousel-gap);
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.cards__slide {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: calc(100% - var(--carousel-peek) - var(--carousel-gap));
+}
+
+.system-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-4) var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  text-align: left;
+  transition: background-color var(--duration-hover) var(--easing-standard);
+}
+
+.system-card:hover {
+  background: var(--color-surface-hover);
+}
+
+.system-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.system-card__name {
+  font-size: var(--font-title-3);
+  font-weight: 700;
+  line-height: var(--leading-title);
+}
+
+.system-card__description {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.system-card__hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-brand);
+  font-size: var(--font-small);
+  font-weight: 700;
+}
+
+.system-card__chevron {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-hover) var(--easing-standard);
+}
+
+.system-card[aria-expanded="true"] {
+  background: var(--color-ink);
+  color: var(--color-page);
+}
+
+.system-card[aria-expanded="true"] .system-card__description {
+  color: #C9C9C9;
+}
+
+/* Sulla card aperta il fondo è nero: il rosso del marchio ci starebbe a 3,3:1,
+   sotto la soglia leggibile, quindi qui il richiamo passa al bianco. */
+
+.system-card[aria-expanded="true"] .system-card__hint {
+  color: var(--color-page);
+}
+
+.system-card[aria-expanded="true"] .system-card__chevron {
+  transform: rotate(180deg);
+}
+
+/* Il pannello torna bianco: le schede macchina sono passate al grigio delle foto
+   e su fondo grigio perderebbero il proprio contorno. */
+
+.machines {
+  margin-top: var(--space-8);
+  padding: var(--space-8) var(--space-5);
+  border-top: 3px solid var(--color-accent);
+  background: var(--color-page);
+}
+
+.machines__title {
+  margin-bottom: var(--space-6);
+  font-size: var(--font-title-4);
+  line-height: var(--leading-title);
+}
+
+/* Card macchina: copertina grigia con il nome sulla foto, corpo bianco sotto.
+   Bordo sottile e ombra appena accennata a riposo; passandoci sopra la card si
+   alza e la foto respira. Il collegamento resta il solo elemento cliccabile,
+   quindi :focus-within porta lo stesso stato a chi naviga da tastiera. */
+
+.machine-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--color-line);
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
+  transition:
+    transform var(--duration-hover) var(--easing-standard),
+    box-shadow var(--duration-hover) var(--easing-standard);
+}
+
+.machine-card:hover,
+.machine-card:focus-within {
+  transform: translateY(calc(-1 * var(--space-1)));
+  box-shadow: var(--shadow-panel);
+}
+
+.machine-card__cover {
+  position: relative;
+  display: block;
+  padding: var(--space-5) var(--space-5) var(--space-12);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.machine-card__cover .media--prodotto {
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.machine-card:hover .media--prodotto,
+.machine-card:focus-within .media--prodotto {
+  transform: scale(1.05);
+}
+
+.machine-card__caption {
+  position: absolute;
+  inset: 50% 0 0 0;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-5);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+
+.machine-card__name {
+  color: var(--color-page);
+  font-size: var(--font-title-4);
+  font-weight: 700;
+  line-height: var(--leading-title);
+}
+
+.machine-card__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.machine-summary {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.machine-card__punti {
+  display: grid;
+  gap: var(--space-3);
+  font-size: var(--font-small);
+}
+
+.machine-card__punto {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.machine-card__spunta {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15em;
+  color: var(--color-accent);
+}
+
+/* Il collegamento scende in fondo: le card di una riga restano allineate anche
+   quando una macchina ha meno punti salienti di un'altra. */
+
+.machine-card__corpo .text-link {
+  margin-top: auto;
+}
+
+/* Locations */
+
+.locations {
+  display: grid;
+  max-width: none;
+  padding: 0;
+}
+
+.locations > * {
+  grid-area: 1 / 1;
+}
+
+.locations__map {
+  align-self: stretch;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-page);
+  color: #CFCFCF;
+}
+
+/* La banda è alta quanto la mappa, non quanto il testo: senza il centraggio
+   verticale titolo, pannello e bottone si impilerebbero contro il bordo alto. */
+
+.locations__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-12) var(--page-gutter);
+}
+
+.locations__title {
+  font-size: var(--font-title-2);
+  line-height: var(--leading-title);
+}
+
+.locations__panel {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 640px;
+  padding: var(--space-8) var(--space-6);
+  background: var(--color-page);
+  box-shadow: var(--shadow-panel);
+}
+
+.locations__country {
+  font-size: var(--font-title-1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.locations__address {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+  line-height: var(--leading-read);
+}
+
+.locations__company {
+  display: block;
+  font-weight: 700;
+}
+
+.locations__address a {
+  color: var(--color-brand);
+}
+
+/* Footer */
+
+.site-footer {
+  background: var(--color-surface);
+  padding: var(--space-12) 0 var(--space-16);
+}
+
+.site-footer__inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+}
+
+.quick-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+}
+
+.quick-links a {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.quick-links a:hover,
+.quick-links a:focus-visible {
+  color: var(--color-brand);
+}
+
+.footer-columns {
+  margin-top: var(--space-10);
+}
+
+.footer-column {
+  border-top: 1px solid var(--color-line);
+}
+
+.footer-column__heading {
+  font-size: var(--font-title-4);
+  font-weight: 700;
+}
+
+.footer-column__panel {
+  padding-bottom: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.footer-column__links {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.footer-column__panel a {
+  text-decoration: none;
+}
+
+.footer-column__panel a:hover,
+.footer-column__panel a:focus-visible {
+  color: var(--color-brand);
+}
+
+.footer-column__claim {
+  max-width: 24ch;
+  color: var(--color-ink);
+  font-size: var(--font-body);
+  font-weight: 700;
+  line-height: var(--leading-title);
+}
+
+.footer-column__address {
+  line-height: var(--leading-read);
+}
+
+.footer-column__contacts {
+  display: block;
+  margin-top: var(--space-3);
+}
+
+.site-footer__divider {
+  height: 1px;
+  margin: var(--space-10) 0;
+  border: 0;
+  background: var(--color-line);
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  transition: color var(--duration-hover) var(--easing-standard);
+}
+
+.social-links a:hover,
+.social-links a:focus-visible {
+  color: var(--color-brand);
+}
+
+.social-links svg {
+  width: 24px;
+  height: 24px;
+}
+
+.legal-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.legal-links a {
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+  text-decoration: none;
+}
+
+.legal-links a:hover,
+.legal-links a:focus-visible {
+  color: var(--color-brand);
+}
+
+.site-footer__copyright {
+  margin-top: var(--space-6);
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: var(--space-10);
+    --logo-height: 52px;
+    --carousel-gap: var(--space-6);
+    --carousel-padding-block: var(--space-16);
+
+    --font-title-1: 40px;
+    --font-title-2: 32px;
+    --font-title-3: 22px;
+    --font-title-4: 18px;
+    --font-lead: 18px;
+  }
+
+  /* Due colonne: testo a sinistra, foto a destra. Le frecce passano ai lati
+     della slide, in riga 1, così restano a metà altezza senza coprire il testo. */
+
+  .hero {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: var(--space-4);
+  }
+
+  .hero > .carousel__viewport {
+    grid-area: 1 / 2;
+  }
+
+  .carousel__frecce [data-carousel-previous] {
+    grid-area: 1 / 1;
+    justify-self: start;
+  }
+
+  .carousel__frecce [data-carousel-next] {
+    grid-area: 1 / 3;
+    justify-self: end;
+  }
+
+  .carousel__frecce .carousel__arrow {
+    width: 56px;
+    height: 56px;
+  }
+
+  .hero__slide,
+  .testata {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+    align-items: center;
+  }
+
+  .soluzioni__lista {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+  }
+
+  .cards__slide {
+    width: calc((100% - var(--carousel-gap)) / 2);
+  }
+
+  .machines {
+    padding: var(--space-10);
+  }
+
+  .locations__content {
+    padding: var(--space-16) var(--page-gutter);
+  }
+
+  .locations__panel {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-10);
+    align-items: center;
+    padding: var(--space-12) var(--space-10);
+  }
+
+  .locations__address {
+    padding-top: 0;
+    padding-left: var(--space-10);
+    border-top: 0;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  .footer-column {
+    border-top: 0;
+  }
+
+  .footer-column__heading .disclosure {
+    padding-top: 0;
+  }
+
+  .footer-column__heading .disclosure:disabled {
+    color: inherit;
+    cursor: default;
+  }
+
+  .footer-column__heading .disclosure__chevron {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --page-gutter: var(--space-16);
+
+    --font-title-1: 48px;
+  }
+
+  /* La slide smette di allargarsi prima del contenitore: le due colonne restano
+     leggibili e le frecce continuano a stare a ridosso della foto. */
+
+  .hero {
+    max-width: 1300px;
+  }
+
+  .locations__panel {
+    max-width: 720px;
+  }
+
+  .cards__slide {
+    width: calc((100% - 2 * var(--carousel-gap)) / 3);
+  }
+
+  .footer-columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Pagine interne */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-bottom: var(--space-8);
+}
+
+.pagina__titolo {
+  font-size: var(--font-title-1);
+  line-height: var(--leading-title);
+  letter-spacing: -0.01em;
+}
+
+.pagina__sottotitolo {
+  max-width: 60ch;
+  color: var(--color-muted);
+  font-size: var(--font-lead);
+}
+
+.testo-lungo {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 68ch;
+  font-size: var(--font-body);
+  line-height: var(--leading-read);
+}
+
+.testo-lungo a {
+  color: var(--color-brand);
+}
+
+/* Banda dei punti chiave: attaccata alla testata dentro la stessa fascia grigia,
+   separata solo da un filetto. Sintesi brevi; la formulazione completa sta in
+   «Versione base», quindi il testo non si ripete uguale due volte. */
+
+.chiavi {
+  padding-top: 0;
+}
+
+.chiavi__lista {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--color-line);
+}
+
+.chiave {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-5) 0;
+}
+
+.chiave__titolo {
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.chiave__valore {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+/* Scheda tecnica: descrizione, versione base e accessori affiancati in un
+   contenitore solo, divisi da filetti. Le colonne vuote non vengono create,
+   quindi una macchina senza accessori non lascia un terzo di pagina bianco. */
+
+.scheda {
+  scroll-margin-top: var(--space-20);
+}
+
+.scheda__colonne {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.scheda__colonna {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.scheda__titolo {
+  font-size: var(--font-title-4);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-title);
+  text-transform: uppercase;
+}
+
+
+.scheda__elenco {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-muted);
+}
+
+.scheda__elenco li {
+  padding-left: var(--space-5);
+  position: relative;
+}
+
+.scheda__elenco li::before {
+  content: "";
+  position: absolute;
+  top: 0.65em;
+  left: 0;
+  width: 8px;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.scheda .text-link {
+  margin-top: var(--space-4);
+}
+
+.notizie {
+  display: grid;
+  gap: var(--space-10);
+}
+
+.notizia {
+  display: grid;
+  gap: var(--space-4);
+  padding-bottom: var(--space-10);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.notizia:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.notizia__testo {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.notizia__data {
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+  letter-spacing: 0.04em;
+}
+
+.notizia__titolo {
+  font-size: var(--font-title-3);
+  line-height: var(--leading-title);
+}
+
+.nav-menu__link[aria-current="page"],
+.nav-menu__sublist a[aria-current="page"] {
+  color: var(--color-brand);
+}
+
+@media (min-width: 768px) {
+  .chiave + .chiave {
+    padding-left: var(--space-8);
+    border-left: 1px solid var(--color-line);
+  }
+
+  .chiave:nth-child(odd):not(:first-child) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .scheda__colonne--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contatti {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+
+  .modulo__coppia {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .scheda__colonne--3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .notizia {
+    grid-template-columns: 4fr 8fr;
+    gap: var(--space-8);
+  }
+}
+
+/* Immagini */
+
+.media {
+  display: block;
+  width: 100%;
+  background: var(--color-surface);
+  object-fit: cover;
+}
+
+.media--hero {
+  aspect-ratio: var(--hero-ratio);
+}
+
+.media--4x3 {
+  aspect-ratio: 4 / 3;
+}
+
+.media--prodotto {
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.galleria,
+.tecnica {
+  grid-column: 1 / -1;
+  margin-top: var(--space-10);
+}
+
+.galleria__titolo {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.tecnica__titolo {
+  margin-bottom: var(--space-6);
+  font-size: var(--font-title-3);
+  line-height: var(--leading-title);
+}
+
+/* La tabella scorre da sola quando non ci sta: il contenitore è l'unica cosa
+   che scorre in orizzontale, la pagina no. */
+
+.tecnica__tabella {
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
+  overflow-x: auto;
+}
+
+.tecnica__tabella + .tecnica__tabella {
+  margin-top: var(--space-6);
+}
+
+.tecnica__tabella table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: var(--font-small);
+}
+
+.tecnica__tabella caption {
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.tecnica__tabella th,
+.tecnica__tabella td {
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+}
+
+.tecnica__tabella thead th {
+  background: var(--color-ink);
+  color: var(--color-page);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tecnica__tabella tbody tr:nth-child(even) {
+  background: var(--color-surface);
+}
+
+.tecnica__tabella tbody th {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tecnica__tabella .numerica {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Galleria: scatti più grandi, che crescono appena sotto il puntatore. */
+
+.galleria__scatto {
+  display: block;
+  overflow: hidden;
+}
+
+.galleria__scatto .media {
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.galleria__scatto:hover .media {
+  transform: scale(1.04);
+}
+
+/* Indice di categoria e pagina della singola macchina */
+
+.griglia-macchine {
+  display: grid;
+  gap: var(--carousel-gap);
+}
+
+.griglia-macchine__voce {
+  display: grid;
+}
+
+.modelli {
+  padding-block: var(--space-10);
+}
+
+/* Centrato come il titolo dei sistemi in home, e così resta sull'asse della
+   griglia anche quando questa si stringe a due colonne. */
+
+.modelli__titolo {
+  margin-bottom: var(--space-6);
+  font-size: var(--font-title-3);
+  line-height: var(--leading-title);
+  text-align: center;
+}
+
+.briciole {
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+}
+
+.briciole ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--font-tiny);
+  list-style: none;
+}
+
+.briciole li + li::before {
+  content: "/";
+  margin-right: var(--space-2);
+  color: var(--color-line);
+}
+
+.briciole a {
+  text-decoration: none;
+}
+
+.briciole a:hover,
+.briciole a:focus-visible {
+  color: var(--color-brand);
+}
+
+.briciole [aria-current="page"] {
+  color: var(--color-ink);
+}
+
+.ritorno {
+  padding-top: 0;
+}
+
+@media (min-width: 768px) {
+  .griglia-macchine,
+  .riquadri {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .griglia-macchine,
+  .riquadri {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .chiavi__lista {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Tornate tutte in riga, il filetto spetta di nuovo a ognuna tranne la prima. */
+
+  .chiave + .chiave {
+    padding-left: var(--space-8);
+    border-left: 1px solid var(--color-line);
+  }
+
+  /* Le proporzioni del mockup: descrizione più stretta, versione base la più
+     larga perché è l'elenco più lungo. */
+
+  .scheda__colonne--3 {
+    grid-template-columns: 34fr 36fr 30fr;
+    gap: var(--space-10);
+  }
+
+  .scheda__colonna + .scheda__colonna {
+    padding-left: var(--space-10);
+    border-left: 1px solid var(--color-line);
+  }
+
+  /* Con due soli modelli la terza colonna resterebbe vuota: la griglia scende a
+     due e si centra, così le card mantengono la larghezza delle altre pagine. */
+
+  .griglia-macchine--pochi {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 860px;
+    margin-inline: auto;
+  }
+}
+
+/* Profilo dell'azienda: banda immagine con pannello bianco sovrapposto */
+
+.profilo {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+.profilo__media {
+  aspect-ratio: 16 / 9;
+}
+
+.profilo__pannello {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+  margin: calc(-1 * var(--space-10)) var(--page-gutter) 0;
+  padding: var(--space-10) var(--space-6) var(--space-6);
+  background: var(--color-page);
+  text-align: center;
+}
+
+.profilo__titolo {
+  font-size: var(--font-title-1);
+  line-height: var(--leading-title);
+  letter-spacing: -0.01em;
+}
+
+.profilo__occhiello {
+  margin-top: var(--space-3);
+  font-size: var(--font-small);
+  font-weight: 700;
+}
+
+.profilo__testo {
+  margin-top: var(--space-6);
+  color: var(--color-muted);
+  line-height: var(--leading-read);
+}
+
+.profilo__seguito {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--page-gutter) var(--carousel-padding-block);
+}
+
+.profilo__sezione {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.profilo__sezione + .profilo__sezione {
+  margin-top: var(--space-16);
+}
+
+.profilo__sottotitolo {
+  font-size: var(--font-title-2);
+  line-height: var(--leading-title);
+}
+
+@media (min-width: 768px) {
+  .profilo__media {
+    aspect-ratio: 2 / 1;
+  }
+
+  .profilo__pannello {
+    margin: calc(-1 * var(--space-20)) auto 0;
+    padding: var(--space-16) var(--space-16) var(--space-10);
+  }
+}
+
+/* Sequenza d'ingresso della home. Ricostruzione in Web Animations API della
+   sequenza di apertura presa come riferimento: i tempi e le curve stanno in
+   js/preloader.js, qui c'è solo la scena. Nessuna libreria, come il resto del
+   sito. Documentazione dei valori e degli scostamenti in ANALYSIS.md. */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  padding: 0 var(--page-gutter);
+  background: var(--color-page);
+  /* Non intercetta niente: si può scorrere e cliccare la pagina sotto mentre
+     la sequenza è ancora a schermo, esattamente come nel riferimento. */
+  pointer-events: none;
+}
+
+/* Al ritorno nella stessa scheda, e per chi ha chiesto meno movimento, la
+   pagina si apre e basta. Le due regole valgono anche senza JavaScript. */
+
+.senza-preloader .preloader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader {
+    display: none;
+  }
+}
+
+/* Il marchio e il testo occupano la stessa casella: uno prende il posto
+   dell'altro senza che nulla si sposti attorno. */
+
+.preloader__marchio {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.preloader__testo {
+  transform-origin: left center;
+  color: var(--color-ink);
+  font-size: var(--font-title-1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.preloader__parola + .preloader__parola {
+  margin-left: 0.28em;
+}
+
+/* Ogni glifo se ne va per conto suo, quindi deve poter essere trasformato:
+   inline non basta. */
+
+.preloader__glifo {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.preloader__logo {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: auto;
+  height: calc(var(--font-title-1) * 2.2);
+  transform-origin: left center;
+  opacity: 0;
+  translate: 0 -50%;
+}
+
+/* Nel riferimento il contatore è largo il 41% del blocco di testo e i due
+   rimpiccioliscono insieme. Qui il testo si scala da sé: se il contatore
+   restasse a misura piena si mangerebbe la riga sui telefoni, lasciando al
+   marchio meno di metà dello spazio che ha nell'originale. */
+
+.preloader__conta {
+  flex: none;
+  color: var(--color-ink);
+  font-size: var(--font-title-3);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .preloader__conta {
+    font-size: var(--font-title-1);
+  }
+}

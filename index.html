@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fase Mechanical Engineering — Trattamento truciolo</title>
+  <meta name="description" content="Centrifughe, impianti e trituratori per il recupero del lubrorefrigerante e il trattamento dello sfrido metallico.">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Sincrono e prima del corpo: al ritorno nella stessa scheda il pannello
+       dev'essere già spento quando il browser disegna, altrimenti si vede un
+       lampo bianco. Il resto della logica sta in js/preloader.js. -->
+  <script>
+    try {
+      if (sessionStorage.getItem('fase-preloader')) {
+        document.documentElement.classList.add('senza-preloader');
+      }
+    } catch (errore) { /* storage negato: la sequenza parte, non è un danno */ }
+  </script>
+
+  <script src="js/dati.js" defer></script>
+  <script src="js/mappa.js" defer></script>
+  <script src="js/layout.js" defer></script>
+  <script src="js/pagine.js" defer></script>
+  <script src="js/preloader.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+<a class="skip-link" href="#contenuto">Vai al contenuto</a>
+
+<!-- Sequenza d'ingresso. aria-hidden perché è decorativa e dura 4 secondi: chi
+     usa un lettore di schermo deve trovare subito la pagina, non un conto alla
+     rovescia. pointer-events:none nel CSS, quindi non blocca niente. -->
+<div class="preloader" data-preloader aria-hidden="true">
+  <div class="preloader__marchio">
+    <p class="preloader__testo" data-preloader-testo>FASEMEC MECHANICAL SOLUTION</p>
+    <img class="preloader__logo" data-preloader-logo src="img/logo-FASE-1.png" alt="">
+  </div>
+  <p class="preloader__conta" data-preloader-conta>0%</p>
+</div>
+
+<div data-layout-header></div>
+
+<main id="contenuto" data-pagina="home">
+  <div data-layout-sedi></div>
+</main>
+
+<div data-layout-footer></div>
+
+<p class="visually-hidden" aria-live="polite" data-carousel-status></p>
+
+</body>
+</html>

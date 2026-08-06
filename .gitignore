@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+
+# Il sito è HTML/CSS/JS puro e non ha un passo di build: si apre aprendo
+# index.html. package.json e vite erano un tentativo abbandonato e non sono
+# referenziati da nessuna pagina.
+node_modules/
+package.json
+package-lock.json
+
+# Originali fotografici ad alta risoluzione (≈ 58 MB). Nel sito entrano le
+# versioni web derivate, che stanno in img/soluzioni/.
+img/settori/
+img/applicazioni/
+
+# Libreria fotografica del committente (≈ 40 MB di PNG a nome UUID) più i
+# render CAD scaricati da fasemec.com. Servono come archivio di lavoro; nel
+# sito entrano le versioni rimontate su grigio in img/su-grigio/.
+# Le poche usate direttamente sono escluse dall'esclusione qui sotto.
+img/immagini/*
+!img/immagini/IMG2-6.jpg
+!img/immagini/IMG3-6.jpg
+!img/immagini/sede-fase.jpg
+!img/immagini/trattamento-truciolo-imp-1.jpg
+!img/immagini/trituratori-verticali.jpg
+
+# Fotografie di riferimento raccolte in fase di studio, mai finite in pagina.
+# Includono materiale di banche immagini con licenza propria.
+trucioli/
+
+# Appunti di studio su un sito di terzi, con estratti del suo codice: materiale
+# di lavoro, non parte del prodotto. Resta in locale.
+ANALYSIS.md
+
+# Immagini superate dalle iterazioni precedenti: nessuna pagina le richiama
+# più. Restano sul disco come archivio, fuori dal repository.
+img/hero/02-disoleatrice-ciclo-continuo.jpg
+img/su-grigio/FC.jpg
+img/su-grigio/FCV480.jpg
+img/su-grigio/IMP-a-ciclo-continuo.jpg
+img/su-grigio/IMP-a-paniere-estraibile2.jpg
+img/su-grigio/imgDK.jpg
+img/su-grigio/centrifuga.jpg
+img/su-grigio/disoleatrice-ciclo-continuo.jpg
+img/su-grigio/trattamento-truciolo-imp.jpg
+img/su-grigio/trituratore-orizzontale.jpg
+img/su-grigio/trituratori-verticali.jpg
+img/su-grigio/app-asciugatura.jpg
+img/su-grigio/app-frantumazione.jpg
+img/su-grigio/app-linea.jpg
+img/su-grigio/set-galvanica.jpg
+img/su-grigio/set-officina.jpg
+img/su-grigio/set-torneria.jpg
