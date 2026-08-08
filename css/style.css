@@ -1407,12 +1407,16 @@ address {
   line-height: var(--leading-title);
 }
 
+/* Il riquadro sta sopra al planisfero, quindi non deve coprirlo: su telefono
+   resta stretto e compatto, e i puntini si vedono tutt'intorno. Cresce solo
+   dove c'è spazio da spartire. */
+
 .locations__panel {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
   width: 100%;
-  max-width: 640px;
-  padding: var(--space-8) var(--space-6);
+  max-width: 330px;
+  padding: var(--space-6) var(--space-5);
   background: var(--color-page);
   box-shadow: var(--shadow-panel);
 }
@@ -1641,7 +1645,8 @@ address {
     grid-template-columns: auto 1fr;
     gap: var(--space-10);
     align-items: center;
-    padding: var(--space-12) var(--space-10);
+    max-width: 620px;
+    padding: var(--space-10) var(--space-10);
   }
 
   .locations__address {
@@ -2213,12 +2218,16 @@ address {
   position: fixed;
   inset: 0;
   z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-8);
+  display: grid;
+  /* minmax(0, 1fr) e non "auto": il testo è white-space: nowrap e, lasciata
+     libera, la colonna si dimensionerebbe sul suo max-content sfondando il
+     contenitore. La scena scivolerebbe a destra e il marchio non sarebbe più
+     al centro dello schermo — si vede solo sui telefoni, dove il testo non ci
+     sta. */
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
   padding: 0 var(--page-gutter);
-  background: var(--color-page);
+  background: #000;
   /* Non intercetta niente: si può scorrere e cliccare la pagina sotto mentre
      la sequenza è ancora a schermo, esattamente come nel riferimento. */
   pointer-events: none;
@@ -2242,13 +2251,14 @@ address {
 
 .preloader__marchio {
   position: relative;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .preloader__testo {
-  transform-origin: left center;
-  color: var(--color-ink);
+  display: inline-block;
+  transform-origin: center center;
+  color: var(--color-page);
   font-size: var(--font-title-1);
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -2268,15 +2278,28 @@ address {
   will-change: transform, opacity;
 }
 
+/* Il marchio esiste solo in rosso, e il rosso su nero perde forza. brightness(0)
+   lo appiattisce a nero tenendo il canale alfa, invert(1) lo ribalta a bianco:
+   una silhouette pulita, senza dover produrre un secondo file. */
+
 .preloader__logo {
   position: absolute;
   top: 50%;
-  left: 0;
+  left: 50%;
   width: auto;
-  height: calc(var(--font-title-1) * 2.2);
-  transform-origin: left center;
+  height: calc(var(--font-title-1) * 3);
+  max-width: 78%;
+  object-fit: contain;
+  transform-origin: center center;
   opacity: 0;
-  translate: 0 -50%;
+  translate: -50% -50%;
+  filter: brightness(0) invert(1);
+}
+
+@media (min-width: 768px) {
+  .preloader__logo {
+    height: calc(var(--font-title-1) * 3.6);
+  }
 }
 
 /* Nel riferimento il contatore è largo il 41% del blocco di testo e i due
@@ -2284,9 +2307,13 @@ address {
    restasse a misura piena si mangerebbe la riga sui telefoni, lasciando al
    marchio meno di metà dello spazio che ha nell'originale. */
 
+/* Fuori dalla riga del testo: ora il centro è del marchio e basta. */
+
 .preloader__conta {
-  flex: none;
-  color: var(--color-ink);
+  position: absolute;
+  right: var(--page-gutter);
+  bottom: var(--page-gutter);
+  color: var(--color-page);
   font-size: var(--font-title-3);
   font-weight: 700;
   font-variant-numeric: tabular-nums;

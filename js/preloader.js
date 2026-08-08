@@ -33,8 +33,9 @@ const TEMPI = {
   // incrociano a metà strada invece di darsi il cambio di netto.
   marchioSfasamento: 170,
 
-  // La battuta che mancava: il marchio fermo, solo. Nessun movimento.
-  marchioPausa: 560,
+  // La battuta più lunga di tutte: il marchio fermo al centro, da solo. È il
+  // motivo per cui la sequenza esiste, quindi dura più di ogni altra fase.
+  marchioPausa: 1250,
 
   // Il pannello parte dopo la pausa, non durante la comparsa del marchio.
   pannelloDurata: 520,
@@ -217,8 +218,16 @@ function scopriMarchio(glifi, logo) {
   const partenze = superstiti.map((n) => n.getBoundingClientRect());
   const passo = partenze[0].width * 1.06; // un filo d'aria fra le lettere
 
+  // Le iniziali si raccolgono al centro della scena, dove comparirà il marchio.
+  // Prima si accostavano al bordo sinistro perché lì stava il logo; ora che il
+  // logo è al centro devono arrivarci anche loro, o il passaggio si spezza.
+  const scena = superstiti[0].closest('.preloader__marchio');
+  const riquadro = scena ? scena.getBoundingClientRect() : partenze[0];
+  const larghezzaGruppo = passo * (superstiti.length - 1) + partenze[superstiti.length - 1].width;
+  const inizioGruppo = riquadro.left + riquadro.width / 2 - larghezzaGruppo / 2;
+
   superstiti.forEach((nodo, indice) => {
-    const arrivo = partenze[0].left + passo * indice;
+    const arrivo = inizioGruppo + passo * indice;
     const spostamento = arrivo - partenze[indice].left;
 
     // Le lettere non svaniscono sul posto: si accostano e insieme rimpiccioliscono
