@@ -8,30 +8,46 @@
 
 const PRELOADER_TESTO = 'FASEMEC MECHANICAL SOLUTION';
 
+// La sequenza è divisa in quattro battute: il testo entra, si sfoglia, il
+// marchio prende il posto delle iniziali, il marchio resta fermo. L'ultima è
+// la più importante: è lì che l'occhio si posa, e prima non esisteva — il
+// pannello partiva mentre il logo stava ancora comparendo, e quel
+// sovrapporsi era lo strappo. Ora fra la comparsa e la partenza c'è una
+// pausa di mezzo secondo in cui non si muove niente.
 const TEMPI = {
-  // § 4 — le tre parole entrano sfalsate di 10 frame a 60 fps.
-  parolaPasso: 166.7,
+  // Entrata: passo accorciato da 166,7 a 100 ms. L'apertura era la parte
+  // più lenta e non ci succede niente: tanto vale arrivarci prima.
+  parolaPasso: 100,
 
-  // § 5 — i glifi non iniziali cadono di un'altezza di riga in 30 frame.
-  cadutaInizio: 1900,
-  cadutaDurata: 500,
-  // L'originale sfalsa di 4 frame (66,7 ms) con ~10 glifi in caduta. Qui i
-  // glifi che cadono sono 22: a 66,7 ms l'onda durerebbe 1,5 s e sfonderebbe
-  // la finestra di 4 s. Dimezzato a 2 frame — vedi nota finale.
-  cadutaPasso: 33.3,
+  // I glifi non iniziali cadono di un'altezza di riga, in onda da destra.
+  cadutaInizio: 780,
+  cadutaDurata: 400,
+  // 22 glifi in caduta: a 28 ms l'onda dura 590 ms e chiude a 1,77 s.
+  cadutaPasso: 28,
 
-  // Fase aggiunta: le iniziali superstiti si stringono e cedono il posto al
-  // marchio. Non esiste nell'originale, dove la composizione finisce vuota.
-  marchioInizio: 3100,
-  marchioDurata: 340,
+  // Le iniziali si stringono e sfumano; il marchio entra mentre svaniscono,
+  // dallo stesso bordo sinistro, così la sostituzione avviene sul posto.
+  marchioInizio: 1820,
+  marchioDurata: 420,
+  // Di quanto il marchio parte in ritardo rispetto alle lettere: si
+  // incrociano a metà strada invece di darsi il cambio di netto.
+  marchioSfasamento: 170,
 
-  // § 3.1 — l'unica animazione che nell'originale è scritta in codice.
-  pannelloRitardo: 3500,
-  pannelloDurata: 500,
+  // La battuta che mancava: il marchio fermo, solo. Nessun movimento.
+  marchioPausa: 560,
 
-  // § 6.3 — il contatore arriva a fondo scala al frame 94 e lì resta.
-  contaFine: 1567,
+  // Il pannello parte dopo la pausa, non durante la comparsa del marchio.
+  pannelloDurata: 520,
+
+  // Il contatore chiude prima che cominci la caduta.
+  contaFine: 1150,
 };
+
+// Momento in cui il marchio è arrivato e sta fermo, e quello in cui il
+// pannello comincia a salire. Derivati, così spostando una battuta le altre
+// si riallineano da sole invece di andare fuori sincrono a mano.
+TEMPI.marchioFermo = TEMPI.marchioInizio + TEMPI.marchioSfasamento + TEMPI.marchioDurata;
+TEMPI.pannelloRitardo = TEMPI.marchioFermo + TEMPI.marchioPausa;
 
 const CURVE = {
   // § 5 — tangenti Lottie o=(1,0) i=(0.45,0.99) del segmento di caduta.
@@ -40,6 +56,9 @@ const CURVE = {
   pannello: 'cubic-bezier(0.42, 0, 0.58, 1)',
   // § 4 — tangenti 0.167/0.833: la ease-in-out simmetrica di After Effects.
   morbida: 'cubic-bezier(0.167, 0.167, 0.833, 0.833)',
+  // Frenata lunga: parte decisa e si posa senza rimbalzo. È la curva con cui
+  // il marchio arriva a fermarsi, e deve leggersi come un appoggio.
+  approdo: 'cubic-bezier(0.16, 0.84, 0.28, 1)',
 };
 
 const CHIAVE_SESSIONE = 'fase-preloader';
@@ -184,46 +203,54 @@ function cadutaGlifi(glifi) {
   });
 }
 
-// Fase nostra: restano F, M e S larghe come le parole che le contenevano. Si
-// stringono verso sinistra mentre il marchio prende il loro posto.
+// Fase nostra: restano F, M e S, larghe come le parole che le contenevano. Si
+// stringono contro il bordo sinistro — lo stesso da cui entra il marchio — e
+// sfumano mentre lui arriva. Condividere l'origine è quello che fa leggere il
+// passaggio come una sostituzione sul posto e non come due cose diverse che si
+// danno il cambio.
 function scopriMarchio(glifi, logo) {
   const superstiti = glifi.filter((g) => g.resta).map((g) => g.nodo);
   if (superstiti.length === 0 || !logo) return;
 
-  // Quanto deve spostarsi ciascuna: la prima resta ferma, le altre si
-  // accostano alla sua destra. Le misure si prendono adesso, a testo fermo.
+  // Le misure si prendono adesso, a testo fermo: dopo la caduta i glifi hanno
+  // trasformazioni applicate e i rettangoli non sarebbero più quelli buoni.
   const partenze = superstiti.map((n) => n.getBoundingClientRect());
-  const larghezza = partenze[0].width;
-  const passo = larghezza * 1.06; // un filo d'aria fra le lettere
+  const passo = partenze[0].width * 1.06; // un filo d'aria fra le lettere
 
   superstiti.forEach((nodo, indice) => {
     const arrivo = partenze[0].left + passo * indice;
     const spostamento = arrivo - partenze[indice].left;
 
+    // Le lettere non svaniscono sul posto: si accostano e insieme rimpiccioliscono
+    // di un soffio, come se il marchio le riassorbisse. Ognuna parte un istante
+    // dopo la precedente, così il gruppo si chiude invece di sparire in blocco.
     nodo.animate(
       [
-        { transform: 'translateX(0)', opacity: 1 },
-        { transform: `translateX(${spostamento.toFixed(1)}px)`, opacity: 0 },
+        { transform: 'translateX(0) scale(1)', opacity: 1, offset: 0 },
+        { transform: `translateX(${(spostamento * 0.72).toFixed(1)}px) scale(0.97)`, opacity: 0.62, offset: 0.55 },
+        { transform: `translateX(${spostamento.toFixed(1)}px) scale(0.9)`, opacity: 0, offset: 1 },
       ],
       {
         duration: TEMPI.marchioDurata,
-        delay: TEMPI.marchioInizio,
-        easing: CURVE.morbida,
+        delay: TEMPI.marchioInizio + indice * 45,
+        easing: CURVE.approdo,
         fill: 'forwards',
       },
     );
   });
 
-  // Il marchio entra mentre le lettere svaniscono: si incrociano a metà.
+  // Il marchio sale di un niente e cresce fino alla misura giusta, incrociando
+  // le lettere a metà strada. Finisce fermo e ci resta: la pausa dopo non è
+  // tempo morto, è il momento in cui la sequenza vuole essere guardata.
   logo.animate(
     [
-      { opacity: 0, transform: 'scale(1.06)' },
-      { opacity: 1, transform: 'scale(1)' },
+      { opacity: 0, transform: 'translateY(6px) scale(0.94)' },
+      { opacity: 1, transform: 'translateY(0) scale(1)' },
     ],
     {
       duration: TEMPI.marchioDurata,
-      delay: TEMPI.marchioInizio + TEMPI.marchioDurata * 0.45,
-      easing: CURVE.morbida,
+      delay: TEMPI.marchioInizio + TEMPI.marchioSfasamento,
+      easing: CURVE.approdo,
       fill: 'forwards',
     },
   );

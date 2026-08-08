@@ -927,6 +927,103 @@ address {
   line-height: var(--leading-body);
 }
 
+/* Azienda: i tre blocchi del profilo. Numerati, con il filetto rosso che marca
+   già i titoli sul retro delle card di Applicazioni e Settori. Sul campo
+   puntinato, come le griglie delle altre pagine interne. */
+
+.pilastri {
+  display: grid;
+  gap: var(--carousel-gap);
+}
+
+.pilastro {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-10) var(--space-8);
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
+}
+
+.pilastro__numero {
+  font-size: var(--font-title-2);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.pilastro__titolo {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-line);
+  font-size: var(--font-title-3);
+  line-height: var(--leading-title);
+}
+
+.pilastro__testo {
+  margin-top: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--font-small);
+  line-height: var(--leading-read);
+}
+
+/* I tre cataloghi in fondo alla pagina Azienda: la pagina non finisce in un
+   vicolo cieco. Stesso sollevamento delle card macchina al passaggio. */
+
+.percorsi {
+  display: grid;
+  gap: var(--carousel-gap);
+  margin-top: var(--carousel-gap);
+}
+
+.percorso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    box-shadow var(--duration-hover) var(--easing-standard),
+    transform var(--duration-hover) var(--easing-standard);
+}
+
+.percorso:hover,
+.percorso:focus-visible {
+  box-shadow: var(--shadow-panel);
+  transform: translateY(-4px);
+}
+
+.percorso__nome {
+  font-size: var(--font-title-4);
+  font-weight: 700;
+}
+
+.percorso__sommario {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+  line-height: var(--leading-body);
+}
+
+.percorso__azione {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  color: var(--color-accent);
+  font-size: var(--font-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.percorso__azione svg {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
 /* Contatti: introduzione e recapiti a sinistra, modulo a destra. Una colonna
    sola su telefono. Riusa scheda__titolo, text-link, button-accent e i token. */
 
@@ -1268,21 +1365,26 @@ address {
 /* Locations */
 
 .locations {
-  display: grid;
+  position: relative;
   max-width: none;
   padding: 0;
+  background: var(--color-page);
 }
 
-.locations > * {
-  grid-area: 1 / 1;
-}
+/* La mappa è sfondo, e come sfondo va tolta dal flusso. Prima stava in griglia
+   con height:100%: Chrome risolveva la percentuale sull'area della griglia,
+   Safari ripiegava sull'altezza intrinseca del canvas — che dopo la scalatura
+   per la densità dello schermo vale il triplo — e la banda diventava alta
+   millecinquecento pixel, con il contenuto centrato fuori dalla vista. In
+   posizione assoluta il canvas non concorre più all'altezza della riga né
+   dipende da essa, in nessun motore. */
 
 .locations__map {
-  align-self: stretch;
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--color-page);
   color: #CFCFCF;
 }
 
@@ -1290,11 +1392,13 @@ address {
    verticale titolo, pannello e bottone si impilerebbero contro il bordo alto. */
 
 .locations__content {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--space-6);
+  min-height: 420px;
   padding: var(--space-12) var(--page-gutter);
 }
 
@@ -1980,14 +2084,18 @@ address {
 
 @media (min-width: 768px) {
   .griglia-macchine,
-  .riquadri {
+  .riquadri,
+  .pilastri,
+  .percorsi {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1200px) {
   .griglia-macchine,
-  .riquadri {
+  .riquadri,
+  .pilastri,
+  .percorsi {
     grid-template-columns: repeat(3, 1fr);
   }
 

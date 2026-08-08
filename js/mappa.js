@@ -1,7 +1,6 @@
 // Rapporto fra il diametro del punto e il passo della griglia: sotto 0,2 la mappa
 // resta leggera come nel riferimento, sopra diventa una macchia.
 const MAPPA_RAPPORTO_PUNTO = 0.17;
-const MAPPA_PASSO_MINIMO_PX = 5;
 
 // Maschera delle terre emerse in proiezione equirettangolare: 180 colonne
 // (lon -180…180) per 68 righe (lat 79…-56). Rasterizzata da Natural Earth 1:50m,
@@ -110,7 +109,11 @@ function perOgniPuntoDiTerra(larghezza, altezza, disegnaPunto) {
   const colonne = TERRE_EMERSE[0].length;
   const righe = TERRE_EMERSE.length;
 
-  const passo = Math.max(larghezza / colonne, MAPPA_PASSO_MINIMO_PX);
+  // Il passo si prende dal lato che sta più stretto, così il planisfero entra
+  // sempre per intero. Prima c'era un minimo fisso di 5 px che su telefono
+  // vinceva sempre: la mappa veniva disegnata larga 900 px dentro un canvas di
+  // 390 e se ne vedeva la fascia centrale, tagliata a metà su entrambi i lati.
+  const passo = Math.min(larghezza / colonne, altezza / righe);
   const raggio = Math.max(passo * MAPPA_RAPPORTO_PUNTO, 0.6);
   const margineSinistro = (larghezza - passo * colonne) / 2;
   const margineAlto = (altezza - passo * righe) / 2;

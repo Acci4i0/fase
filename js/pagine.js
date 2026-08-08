@@ -407,8 +407,60 @@ function galleriaMacchina(macchina) {
 
 // ---------------------------------------------------------------- altre pagine
 
+// Stessa impaginazione delle pagine di catalogo: testata a due colonne nella
+// fascia grigia, contenuti sul campo puntinato, una via d'uscita in fondo.
+// Prima era una banda a tutta larghezza con un pannello sovrapposto e sotto
+// tre blocchi di prosa centrata: leggibile ma di un'altra epoca rispetto al
+// resto del sito. paginaProfilo resta, la usano ancora Applicazioni e Settori.
 function paginaAzienda() {
-  return paginaProfilo(DATI.pagine.azienda, [{ testo: 'Home', href: 'index.html' }, { testo: 'Azienda' }]);
+  const p = DATI.pagine.azienda;
+
+  return briciole([{ testo: 'Home', href: 'index.html' }, { testo: 'Azienda' }])
+    + fasciaProdotto(`
+    <div class="section testata">
+      <div class="testata__testo">
+        <p class="eyebrow">${p.occhiello}</p>
+        <h1 class="pagina__titolo">${p.titolo}</h1>
+        <p class="pagina__sottotitolo">${p.intro}</p>
+        <a class="button-accent" href="${percorso('contatti.html')}">Parla con un tecnico</a>
+      </div>
+      ${media(p.immagine, p.placeholder, 'media--hero testata__foto', true)}
+    </div>`)
+    + fasciaPunteggiata(`
+    <div class="section">
+      <ul class="pilastri">
+        ${p.sezioni.map(pilastro).join('')}
+      </ul>
+      ${percorsiSistemi()}
+    </div>`) + `
+
+  <div class="section chiusura">
+    <a class="text-link" href="${percorso('contatti.html')}">Parla con un tecnico ${frecciaDestra()}</a>
+  </div>`;
+}
+
+// Un blocco per sezione, numerato. Il numero e il filetto rosso sono lo stesso
+// segno che marca i titoli sul retro delle card di Applicazioni e Settori.
+function pilastro(sezione, indice) {
+  return `
+        <li class="pilastro" data-reveal>
+          <p class="pilastro__numero">${String(indice + 1).padStart(2, '0')}</p>
+          <h2 class="pilastro__titolo">${sezione.titolo}</h2>
+          ${sezione.paragrafi.map((t) => `<p class="pilastro__testo">${t}</p>`).join('')}
+        </li>`;
+}
+
+// La pagina non finisce in un vicolo cieco: da qui si entra nei tre cataloghi.
+function percorsiSistemi() {
+  return `
+      <nav class="percorsi" aria-label="Sistemi di trattamento truciolo">
+        ${DATI.sistemi.map((s) => `
+        <a class="percorso" href="${percorso(s.pagina)}">
+          <span class="percorso__nome">${s.nome}</span>
+          <span class="percorso__sommario">${s.sommario}</span>
+          <span class="percorso__azione">Vedi i modelli ${frecciaDestra()}</span>
+        </a>`).join('')}
+      </nav>`;
 }
 
 // Banda a tutta larghezza, pannello bianco che la scavalca, poi la prosa
@@ -440,6 +492,9 @@ function sezioneProfilo(sezione) {
     </section>`;
 }
 
+// La pagina si apre sui recapiti, non su un discorso: chi arriva qui vuole un
+// numero o un indirizzo. La prosa che stava prima del blocco «Dove siamo» è
+// stata tolta; resta in DATI.pagine.contatti.intro, non stampata.
 function paginaContatti() {
   const p = DATI.pagine.contatti;
   const a = DATI.azienda;
@@ -450,7 +505,6 @@ function paginaContatti() {
       <p class="eyebrow">${a.nome}</p>
       <h1 class="pagina__titolo">${p.titolo}</h1>
       <p class="pagina__sottotitolo">${p.sottotitolo}</p>
-      ${p.intro.map((t) => `<p class="contatti__testo">${t}</p>`).join('')}
 
       <div class="recapiti">
         <h2 class="scheda__titolo">Dove siamo</h2>
