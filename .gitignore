@@ -51,3 +51,7 @@ img/su-grigio/app-linea.jpg
 img/su-grigio/set-galvanica.jpg
 img/su-grigio/set-officina.jpg
 img/su-grigio/set-torneria.jpg
+
+# Sorgente ad alta risoluzione da cui e stato ricalcato img/logo-fase.svg.
+# Non serve al sito: resta in locale come provenienza del ricalco.
+img/logo_vettoriale.PNG
