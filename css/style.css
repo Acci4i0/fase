@@ -2298,9 +2298,17 @@ address {
 /* Ogni glifo se ne va per conto suo, quindi deve poter essere trasformato:
    inline non basta. */
 
-.preloader__glifo {
+.preloader__glifo,
+.preloader__marca {
   display: inline-block;
   will-change: transform, opacity;
+}
+
+/* Il nome si muove come una parola sola e cresce dal proprio centro: e il
+   punto in cui il marchio lo sostituira. */
+
+.preloader__marca {
+  transform-origin: center center;
 }
 
 /* Il marchio esiste solo in rosso, e il rosso su nero perde forza. brightness(0)
@@ -2332,24 +2340,6 @@ address {
    restasse a misura piena si mangerebbe la riga sui telefoni, lasciando al
    marchio meno di metà dello spazio che ha nell'originale. */
 
-/* Fuori dalla riga del testo: ora il centro è del marchio e basta. */
-
-.preloader__conta {
-  position: absolute;
-  right: var(--page-gutter);
-  bottom: var(--page-gutter);
-  color: var(--color-page);
-  font-size: var(--font-title-3);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-}
-
-@media (min-width: 768px) {
-  .preloader__conta {
-    font-size: var(--font-title-1);
-  }
-}
 
 /* ------------------------------------------------------------------ */
 /* Micro animazioni. Tutte in CSS e tutte sulle stesse due proprietà —
