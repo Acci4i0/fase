@@ -8,7 +8,10 @@
 
 :root {
   --color-brand: #0B3CC1;
-  --color-accent: #D10015; /* rosso del marchio, letto da img/logo-FASE-1.png */
+  /* Pantone 7627 C. Sostituisce il #D10015 ricavato dai pixel del logo: e piu
+     scuro, quindi tanto il bianco sopra quanto il rosso su bianco guadagnano
+     contrasto. Attenzione: il PNG del marchio resta sul rosso di prima. */
+  --color-accent: #A72B2A;
   --color-ink: #111;
   --color-muted: #606060; /* tarato per restare a 4,5:1 sul grigio qui sotto */
   --color-surface: #DCDCDC; /* fondo delle foto di prodotto: vedi img/su-grigio/ */
