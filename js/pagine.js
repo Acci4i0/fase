@@ -270,11 +270,14 @@ function paginaMacchina(dataset) {
     { testo: sistema.nome, href: sistema.pagina },
     { testo: macchina.nome },
   ])
+    // L'ordine è quello con cui si guarda una macchina: cosa è, com'è fatta,
+    // quanto rende. I dati tecnici stavano in fondo, dopo la prosa: per
+    // arrivarci bisognava scorrere due schermate.
     + fasciaProdotto(testataMacchina(sistema, macchina) + bandaChiavi(macchina))
-    + schedaMacchina(macchina)
+    + specificheTecniche(macchina)
     + fasciaPunteggiata(`
     <div class="section">
-      ${specificheTecniche(macchina)}
+      ${schedaMacchina(macchina)}
       ${galleriaMacchina(macchina)}
     </div>`) + `
 
@@ -360,11 +363,15 @@ function elencoScheda(voci) {
 function specificheTecniche(macchina) {
   if (!macchina.specifiche || macchina.specifiche.length === 0) return '';
 
+  // Sta subito sotto la banda grigia, non più annidata in un altro blocco:
+  // porta quindi il proprio contenitore di pagina.
   return `
+  <div class="section">
       <section class="tecnica" id="specifiche" aria-labelledby="titolo-specifiche" data-reveal>
         <h2 class="tecnica__titolo" id="titolo-specifiche">Specifiche tecniche</h2>
         ${macchina.specifiche.map(tabellaSpecifiche).join('')}
-      </section>`;
+      </section>
+  </div>`;
 }
 
 function tabellaSpecifiche(tabella) {
@@ -417,12 +424,10 @@ function paginaAzienda() {
 
   return briciole([{ testo: 'Home', href: 'index.html' }, { testo: 'Azienda' }])
     + fasciaProdotto(`
-    <div class="section testata">
+    <div class="section testata testata--asciutta">
       <div class="testata__testo">
         <p class="eyebrow">${p.occhiello}</p>
         <h1 class="pagina__titolo">${p.titolo}</h1>
-        <p class="pagina__sottotitolo">${p.intro}</p>
-        <a class="button-accent" href="${percorso('contatti.html')}">Parla con un tecnico</a>
       </div>
       ${media(p.immagine, p.placeholder, 'media--hero testata__foto', true)}
     </div>`)
@@ -492,41 +497,14 @@ function sezioneProfilo(sezione) {
     </section>`;
 }
 
-// La pagina si apre sui recapiti, non su un discorso: chi arriva qui vuole un
-// numero o un indirizzo. La prosa che stava prima del blocco «Dove siamo» è
-// stata tolta; resta in DATI.pagine.contatti.intro, non stampata.
+// Solo il modulo. Intestazione, recapiti e collegamento alla mappa sono stati
+// tolti: i recapiti stanno gia nel pie di pagina di ogni pagina e nella sezione
+// Sedi di home e Azienda, quindi qui erano la terza copia. Restano nei dati.
 function paginaContatti() {
   const p = DATI.pagine.contatti;
-  const a = DATI.azienda;
 
   return briciole([{ testo: 'Home', href: 'index.html' }, { testo: p.titolo }]) + `
-  <div class="section contatti">
-    <div class="contatti__intro">
-      <p class="eyebrow">${a.nome}</p>
-      <h1 class="pagina__titolo">${p.titolo}</h1>
-      <p class="pagina__sottotitolo">${p.sottotitolo}</p>
-
-      <div class="recapiti">
-        <h2 class="scheda__titolo">Dove siamo</h2>
-        <address class="recapiti__blocco">
-          <span class="recapiti__ragione">${a.ragioneSociale}</span>
-          ${a.via}<br>
-          ${a.citta}<br>
-          ${a.paese}
-        </address>
-        <ul class="recapiti__voci">
-          <li>${icona('M4 5h5l2 5-3 2a12 12 0 006 6l2-3 5 2v5a15 15 0 01-17-17z', 'recapiti__icona')}
-            <a href="${a.telefonoHref}">${a.telefono}</a></li>
-          <li>${icona('M3 6h18v12H3zM3 7l9 6 9-6', 'recapiti__icona')}
-            <a href="mailto:${a.email}">${a.email}</a></li>
-          <li>${icona('M7 8V4h10v4M7 17v3h10v-3M4 8h16v9H4z', 'recapiti__icona')}
-            <span>Fax ${a.fax}</span></li>
-        </ul>
-        <a class="text-link" href="${a.mappa}" target="_blank" rel="noopener"
-           aria-label="Posizione della sede su Google Maps, si apre in una nuova scheda">Apri la mappa ${frecciaDestra()}</a>
-      </div>
-    </div>
-
+  <div class="section contatti contatti--solo-modulo">
     ${moduloContatti(p.argomenti)}
   </div>`;
 }
@@ -536,7 +514,7 @@ function paginaContatti() {
 function moduloContatti(argomenti) {
   return `
     <form class="modulo" novalidate data-modulo-contatti aria-labelledby="titolo-modulo">
-      <h2 class="scheda__titolo" id="titolo-modulo">Scrivici</h2>
+      <h1 class="scheda__titolo" id="titolo-modulo">Scrivici</h1>
 
       <div class="modulo__coppia">
         ${campoModulo('nome', 'Nome', { autocomplete: 'given-name' })}

@@ -601,11 +601,42 @@ address {
 
 .testata__foto {
   aspect-ratio: 3 / 2;
-  max-height: 340px;
+  max-height: 300px;
+}
+
+/* Sotto i 768 px l'impaginazione e in colonna: fra titolo, sintesi, pulsante e
+   foto la banda dei punti chiave finiva fuori schermo. */
+
+@media (max-width: 767px) {
+  .testata__foto {
+    max-height: 190px;
+  }
+
+  .testata--prodotto {
+    padding-block: var(--space-5);
+  }
+
+  .chiave {
+    padding: var(--space-4) 0;
+  }
 }
 
 .testata--prodotto {
+  padding-block: var(--space-6);
+  gap: var(--space-4);
+}
+
+/* Testata di sola intestazione e foto, senza paragrafo né pulsante: con quel
+   poco dentro, l'imbottitura piena lasciava una fascia grigia mezza vuota. Il
+   titolo si allinea al centro della foto invece che in cima. */
+
+.testata--asciutta {
+  align-content: center;
   padding-block: var(--space-8);
+}
+
+.testata--asciutta .testata__testo {
+  justify-content: center;
 }
 
 .testata__azioni {
@@ -1024,7 +1055,8 @@ address {
   height: var(--space-5);
 }
 
-/* Contatti: introduzione e recapiti a sinistra, modulo a destra. Una colonna
+/* Contatti: oggi la pagina porta solo il modulo. La griglia a due colonne resta
+   perché è il contenitore, ma la variante --solo-modulo la riporta a una. Una colonna
    sola su telefono. Riusa scheda__titolo, text-link, button-accent e i token. */
 
 .contatti {
@@ -1032,50 +1064,12 @@ address {
   gap: var(--space-12);
 }
 
-.contatti__intro {
-  display: grid;
-  gap: var(--space-4);
-  align-content: start;
-}
+/* Con i recapiti tolti resta una colonna sola: senza un tetto il modulo si
+   stirerebbe per tutta la larghezza e i campi diventerebbero righe lunghissime. */
 
-.contatti__testo {
-  max-width: 60ch;
-  color: var(--color-muted);
-}
-
-.recapiti {
-  display: grid;
-  gap: var(--space-4);
-  margin-top: var(--space-6);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--color-line);
-}
-
-.recapiti__ragione {
-  display: block;
-  font-weight: 700;
-}
-
-.recapiti__blocco {
-  line-height: var(--leading-read);
-}
-
-.recapiti__voci {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.recapiti__voci li {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-3);
-  align-items: center;
-}
-
-.recapiti__icona {
-  width: 20px;
-  height: 20px;
-  color: var(--color-accent);
+.contatti--solo-modulo {
+  max-width: 720px;
+  margin-inline: auto;
 }
 
 /* Modulo */
@@ -1413,16 +1407,17 @@ address {
 
 .locations__panel {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
-  max-width: 330px;
-  padding: var(--space-6) var(--space-5);
+  max-width: 272px;
+  padding: var(--space-5) var(--space-5);
   background: var(--color-page);
   box-shadow: var(--shadow-panel);
+  font-size: var(--font-small);
 }
 
 .locations__country {
-  font-size: var(--font-title-1);
+  font-size: var(--font-title-3);
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -1897,6 +1892,13 @@ address {
     gap: var(--space-16);
   }
 
+  /* Il modulo da solo resta a una colonna: le due sono per quando accanto
+     c'erano i recapiti. */
+
+  .contatti--solo-modulo {
+    grid-template-columns: 1fr;
+  }
+
   .modulo__coppia {
     grid-template-columns: 1fr 1fr;
   }
@@ -1933,10 +1935,25 @@ address {
   object-fit: contain;
 }
 
-.galleria,
-.tecnica {
+.galleria {
   grid-column: 1 / -1;
   margin-top: var(--space-10);
+}
+
+/* Le specifiche non stanno più dentro un altro blocco, quindi niente
+   grid-column né margine di distacco: se li tenesse resterebbe una fascia
+   vuota fra la banda grigia e la prima tabella. */
+
+.tecnica {
+  margin-top: 0;
+}
+
+/* Le specifiche arrivano subito sotto la banda grigia e vanno lette come sua
+   continuazione: con l'imbottitura piena in cima la prima tabella scivolava
+   sotto la piega su un portatile. */
+
+.section:has(> .tecnica) {
+  padding-top: var(--space-6);
 }
 
 .galleria__titolo {
@@ -1948,7 +1965,7 @@ address {
 }
 
 .tecnica__titolo {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   font-size: var(--font-title-3);
   line-height: var(--leading-title);
 }
@@ -2051,8 +2068,8 @@ address {
 }
 
 .briciole {
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
 }
 
 .briciole ol {
@@ -2324,4 +2341,108 @@ address {
   .preloader__conta {
     font-size: var(--font-title-1);
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Micro animazioni. Tutte in CSS e tutte sulle stesse due proprietà —
+   transform e opacity — che il compositore gestisce senza rifare il layout.
+   La regola prefers-reduced-motion in cima al foglio azzera ogni durata:
+   non serve ripetere qui l'eccezione. */
+
+/* Comparsa dei testi: i blocchi di una stessa griglia entrano sfalsati invece
+   che tutti insieme. Il ritardo è sul quarto elemento in poi azzerato, se no
+   una griglia lunga finirebbe per far aspettare troppo l'ultima card. */
+
+.js-reveal .pilastri > [data-reveal]:nth-child(2),
+.js-reveal .riquadri > [data-reveal]:nth-child(2),
+.js-reveal .griglia-macchine > [data-reveal]:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.js-reveal .pilastri > [data-reveal]:nth-child(3),
+.js-reveal .riquadri > [data-reveal]:nth-child(3),
+.js-reveal .griglia-macchine > [data-reveal]:nth-child(3) {
+  transition-delay: 180ms;
+}
+
+/* Pulsanti: oltre al colore, un sollevamento appena percettibile. Il rientro è
+   più lento della salita, così il click ha un peso. */
+
+.button-accent {
+  transition:
+    background-color var(--duration-hover) var(--easing-standard),
+    transform var(--duration-hover) var(--easing-standard),
+    box-shadow var(--duration-hover) var(--easing-standard);
+}
+
+.button-accent:hover,
+.button-accent:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-panel);
+}
+
+.button-accent:active {
+  transform: translateY(0);
+  transition-duration: 60ms;
+}
+
+/* Icone: le frecce accompagnano il testo invece di stare ferme. */
+
+.percorso__azione svg {
+  transition: transform var(--duration-hover) var(--easing-standard);
+}
+
+.percorso:hover .percorso__azione svg,
+.percorso:focus-visible .percorso__azione svg {
+  transform: translateX(var(--space-1));
+}
+
+/* Il segno che gira sulle card di Applicazioni e Settori ruota un quarto al
+   passaggio: anticipa il movimento che il click completerà. */
+
+.riquadro__segno svg {
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.riquadro:hover .riquadro__segno svg {
+  transform: rotate(90deg);
+}
+
+/* Hover delle immagini: lo zoom c'era solo sulle card che si girano. Qui vale
+   per la griglia di catalogo e per la galleria della scheda, che sono gli altri
+   due posti dove una foto è dentro un riquadro che la può ritagliare. */
+
+.machine-card,
+.galleria__scatto {
+  display: block;
+  overflow: hidden;
+}
+
+.machine-card .media,
+.galleria__scatto .media {
+  transition: transform var(--duration-slide) var(--easing-standard);
+}
+
+.machine-card:hover .media,
+.machine-card:focus-within .media,
+.galleria__scatto:hover .media {
+  transform: scale(1.04);
+}
+
+/* Numeri: salgono al loro posto un istante dopo la card che li contiene, così
+   il blocco si compone in due tempi invece di apparire tutto insieme.
+   Un conteggio da zero qui non avrebbe senso — 01, 02 e 03 sono etichette, non
+   misure — e sul sito non ci sono statistiche da far salire. */
+
+.js-reveal .pilastro[data-reveal] .pilastro__numero {
+  opacity: 0;
+  transform: translateY(0.3em);
+  transition:
+    opacity var(--duration-slide) var(--easing-standard) 140ms,
+    transform var(--duration-slide) var(--easing-standard) 140ms;
+}
+
+.js-reveal .pilastro[data-reveal].is-revealed .pilastro__numero {
+  opacity: 1;
+  transform: none;
 }
