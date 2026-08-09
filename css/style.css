@@ -1788,9 +1788,17 @@ address {
   scroll-margin-top: var(--space-20);
 }
 
+/* Il blocco poggiava direttamente sul campo puntinato e i puntini passavano
+   dietro le lettere: leggibile su monitor, faticoso su telefono, dove il testo
+   e piu fitto. Ora e una superficie piena come le altre schede della pagina —
+   pilastri, riquadri, percorsi — e i puntini restano visibili tutt'intorno. */
+
 .scheda__colonne {
   display: grid;
   gap: var(--space-8);
+  padding: var(--space-8) var(--space-6);
+  background: var(--color-page);
+  box-shadow: var(--shadow-header);
 }
 
 .scheda__colonna {

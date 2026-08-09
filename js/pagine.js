@@ -436,11 +436,7 @@ function paginaAzienda() {
         ${p.sezioni.map(pilastro).join('')}
       </ul>
       ${percorsiSistemi()}
-    </div>`) + `
-
-  <div class="section chiusura">
-    <a class="text-link" href="${percorso('contatti.html')}">Parla con un tecnico ${frecciaDestra()}</a>
-  </div>`;
+    </div>`);
 }
 
 // Un blocco per sezione, numerato. Il numero e il filetto rosso sono lo stesso
