@@ -2237,116 +2237,108 @@ address {
   }
 }
 
-/* Sequenza d'ingresso della home. Ricostruzione in Web Animations API della
-   sequenza di apertura presa come riferimento: i tempi e le curve stanno in
-   js/preloader.js, qui c'è solo la scena. Nessuna libreria, come il resto del
-   sito. Documentazione dei valori e degli scostamenti in ANALYSIS.md. */
+/* Intro. Sipario davanti alla home: nero, monocromatico, breve. Non tocca
+   nulla del sito sotto — quando si apre, la pagina e gia quella di sempre,
+   coi suoi colori. Animate solo transform, opacity e clip-path. */
 
-.preloader {
+.intro {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 200;
   display: grid;
-  /* minmax(0, 1fr) e non "auto": il testo è white-space: nowrap e, lasciata
-     libera, la colonna si dimensionerebbe sul suo max-content sfondando il
-     contenitore. La scena scivolerebbe a destra e il marchio non sarebbe più
-     al centro dello schermo — si vede solo sui telefoni, dove il testo non ci
-     sta. */
-  grid-template-columns: minmax(0, 1fr);
   place-items: center;
-  padding: 0 var(--page-gutter);
-  background: #000;
-  /* Non intercetta niente: si può scorrere e cliccare la pagina sotto mentre
-     la sequenza è ancora a schermo, esattamente come nel riferimento. */
-  pointer-events: none;
+  background: #060606;
+  /* Si apre verso l'alto: il bordo basso sale e scopre la home. */
+  clip-path: inset(0 0 0 0);
 }
 
 /* Al ritorno nella stessa scheda, e per chi ha chiesto meno movimento, la
-   pagina si apre e basta. Le due regole valgono anche senza JavaScript. */
+   pagina si apre e basta. Valgono anche senza JavaScript. */
 
-.senza-preloader .preloader {
+.senza-intro .intro {
   display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .preloader {
+  .intro {
     display: none;
   }
 }
 
-/* Il marchio e il testo occupano la stessa casella: uno prende il posto
-   dell'altro senza che nulla si sposti attorno. */
-
-.preloader__marchio {
+.intro__scena {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: min(55vw, 850px);
+}
+
+/* Il marchio e coperto e viene scoperto da sinistra dalla linea che lo
+   attraversa: e la maschera a rivelarlo, non una dissolvenza. */
+
+.intro__marchio {
+  display: block;
   width: 100%;
-  text-align: center;
+  height: auto;
+  color: #FFF;
+  clip-path: inset(0 100% 0 0);
+  transform: scale(0.985);
+  transform-origin: center center;
 }
 
-.preloader__testo {
-  display: inline-block;
-  transform-origin: center center;
-  color: var(--color-page);
-  font-size: var(--font-title-1);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+.intro__sottotitolo {
+  margin: 0;
+  color: #F5F5F5;
+  font-size: clamp(9px, 1.15vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.2em;
   line-height: 1;
-  white-space: nowrap;
-}
-
-.preloader__parola + .preloader__parola {
-  margin-left: 0.28em;
-}
-
-/* Ogni glifo se ne va per conto suo, quindi deve poter essere trasformato:
-   inline non basta. */
-
-.preloader__glifo,
-.preloader__marca {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-/* Il nome si muove come una parola sola e cresce dal proprio centro: e il
-   punto in cui il marchio lo sostituira. */
-
-.preloader__marca {
-  transform-origin: center center;
-}
-
-/* Il marchio esiste solo in rosso, e il rosso su nero perde forza. brightness(0)
-   lo appiattisce a nero tenendo il canale alfa, invert(1) lo ribalta a bianco:
-   una silhouette pulita, senza dover produrre un secondo file. */
-
-/* Il marchio e SVG inline, ricalcato dalla versione ad alta risoluzione: nitido
-   a qualunque misura e, essendo nel documento, i suoi tracciati sono animabili
-   uno per uno. Il colore arriva da currentColor, quindi non serve piu ribaltare
-   un raster con un filtro. */
-
-.preloader__logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: auto;
-  height: calc(var(--font-title-1) * 3);
-  max-width: 78%;
-  color: var(--color-page);
-  transform-origin: center center;
+  text-transform: uppercase;
   opacity: 0;
-  translate: -50% -50%;
+  transform: translateY(6px);
 }
 
-@media (min-width: 768px) {
-  .preloader__logo {
-    height: calc(var(--font-title-1) * 3.6);
+/* La linea di scansione. Sottile, bianca, con un alone appena percettibile:
+   deve leggersi come uno strumento di misura, non come un raggio. */
+
+.intro__linea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: #FFF;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .intro__scena {
+    width: 78vw;
+    gap: var(--space-4);
+  }
+
+  .intro__sottotitolo {
+    font-size: 9px;
+    letter-spacing: 0.16em;
   }
 }
 
-/* Nel riferimento il contatore è largo il 41% del blocco di testo e i due
-   rimpiccioliscono insieme. Qui il testo si scala da sé: se il contatore
-   restasse a misura piena si mangerebbe la riga sui telefoni, lasciando al
-   marchio meno di metà dello spazio che ha nell'originale. */
+/* Durante l'intro la pagina sotto non si muove. La classe viene tolta a fine
+   sequenza e, per sicurezza, anche se qualcosa va storto. */
 
+.intro-in-corso {
+  overflow: hidden;
+}
+
+/* Il logo dell'intestazione resta invisibile finche quello dell'intro non e
+   arrivato al suo posto: lo scambio deve passare inosservato. */
+
+.intro-in-volo .site-header__marchio {
+  opacity: 0;
+}
 
 /* ------------------------------------------------------------------ */
 /* Micro animazioni. Tutte in CSS e tutte sulle stesse due proprietà —
