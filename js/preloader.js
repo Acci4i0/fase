@@ -31,13 +31,15 @@ const TEMPI = {
   cadutaDurata: 380,
   cadutaPasso: 26,
 
-  // Il nome si porta al centro e cresce. È un blocco solo, non quattro lettere
-  // da riallineare: si muove come una parola.
-  marcaDurata: 620,
+  // Il nome si porta sopra le lettere disegnate e ne prende la misura, poi
+  // avviene lo scambio. È un blocco solo, quindi si muove come una parola.
+  marcaDurata: 560,
 
-  // Il marchio entra mentre il nome è ancora in viaggio: si sovrappongono.
-  marchioAnticipo: 200,
-  marchioDurata: 420,
+  // Deformazione dei tracciati: è la battuta che si guarda, quindi ha respiro.
+  morphDurata: 760,
+
+  // L'anello si chiude attorno alle lettere mentre finiscono di formarsi.
+  anelloDurata: 460,
 
   // Il marchio fermo, da solo. È il momento per cui esiste la sequenza.
   marchioPausa: 1000,
@@ -84,9 +86,9 @@ function avviaPreloader() {
   window.addEventListener('resize', riadatta);
 
   const fineCaduta = entrataECaduta(composizione);
-  portaAlCentro(composizione.marca, logo, fineCaduta);
+  const marchioFermo = morphNelMarchio(composizione.marca, logo, fineCaduta);
 
-  uscitaPannello(pannello, ritardoUscita(fineCaduta), () => {
+  uscitaPannello(pannello, ritardoUscita(marchioFermo), () => {
     window.removeEventListener('resize', riadatta);
     pannello.remove();
   });
@@ -202,54 +204,128 @@ function entrataECaduta({ marca, cadenti, parole }) {
   return inizioCaduta + (cadenti.length - 1) * TEMPI.cadutaPasso + TEMPI.cadutaDurata;
 }
 
-// Il nome scivola al centro della scena e cresce verso la misura del marchio,
-// che gli si sovrappone mentre è ancora in movimento. Condividere centro e
-// misura è quello che fa leggere il passaggio come una cosa sola che si
-// trasforma, invece di due che si danno il cambio.
-function portaAlCentro(marca, logo, fineCaduta) {
-  if (!marca || !logo) return;
+// Costruisce l'attributo d di una lettera. I buchi si contraggono sul proprio
+// centro invece di restare: la A del testo ha l'occhiello chiuso, quella del
+// marchio no, e farlo rimpicciolire fino a sparire e piu leggibile che
+// deformarlo verso una forma che dall'altra parte non esiste.
+function tracciaLettera(lettera, t) {
+  const punto = (q, r) => `${(q[0] + (r[0] - q[0]) * t).toFixed(2)} ${(q[1] + (r[1] - q[1]) * t).toFixed(2)}`;
+  let d = `M${lettera.da.map((q, i) => punto(q, lettera.a[i])).join('L')}Z`;
 
-  const partenza = marca.getBoundingClientRect();
-  const scena = marca.closest('.preloader__marchio').getBoundingClientRect();
-  const arrivo = logo.getBoundingClientRect();
-
-  const spostamento = (scena.left + scena.width / 2) - (partenza.left + partenza.width / 2);
-  // Quanto deve crescere il nome per stare alla larghezza del marchio. Il tetto
-  // evita che su schermi stretti diventi più grande del marchio che lo sostituisce.
-  const crescita = partenza.width > 0
-    ? Math.min(2.4, Math.max(1, (arrivo.width * 0.82) / partenza.width))
-    : 1;
-
-  marca.animate(
-    [
-      { transform: 'translateX(0) scale(1)', opacity: 1 },
-      { transform: `translateX(${spostamento.toFixed(1)}px) scale(${crescita.toFixed(3)})`, opacity: 0 },
-    ],
-    {
-      duration: TEMPI.marcaDurata,
-      delay: fineCaduta,
-      easing: CURVE.approdo,
-      fill: 'forwards',
-    },
-  );
-
-  logo.animate(
-    [
-      { opacity: 0, transform: 'scale(0.94)' },
-      { opacity: 1, transform: 'scale(1)' },
-    ],
-    {
-      duration: TEMPI.marchioDurata,
-      delay: fineCaduta + TEMPI.marcaDurata - TEMPI.marchioAnticipo,
-      easing: CURVE.approdo,
-      fill: 'forwards',
-    },
-  );
+  const resta = Math.max(0.001, 1 - t);
+  lettera.buchi.forEach((buco) => {
+    const cx = buco.reduce((s, q) => s + q[0], 0) / buco.length;
+    const cy = buco.reduce((s, q) => s + q[1], 0) / buco.length;
+    d += `M${buco.map((q) => `${(cx + (q[0] - cx) * resta).toFixed(2)} ${(cy + (q[1] - cy) * resta).toFixed(2)}`).join('L')}Z`;
+  });
+  return d;
 }
 
-// Il pannello parte dopo che il marchio è arrivato e ha avuto la sua pausa.
-function ritardoUscita(fineCaduta) {
-  const marchioFermo = fineCaduta + TEMPI.marcaDurata - TEMPI.marchioAnticipo + TEMPI.marchioDurata;
+// Il passaggio dal nome al marchio.
+//
+// Le lettere del marchio partono con la forma di quelle del testo: stesse
+// lettere, stesso font. Il nome scritto in HTML si porta esattamente sopra di
+// loro e li si scambiano — forme identiche nello stesso posto, quindi lo
+// scambio non si vede. Da quel momento sono i tracciati a deformarsi, e ogni
+// forma si puo seguire fino a quella d'arrivo.
+//
+// L'anello e la barra della E non si deformano da nulla: arrivano. Sono pezzi
+// che nel testo non hanno un corrispettivo, e fingere che nascano da una
+// lettera si vedrebbe.
+function morphNelMarchio(marca, svg, fineCaduta) {
+  if (!marca || !svg || typeof MARCHIO === 'undefined') return fineCaduta;
+
+  const tracciati = new Map(
+    [...svg.querySelectorAll('[data-marchio]')].map((n) => [n.dataset.marchio, n]),
+  );
+  const sottotitolo = svg.querySelector('text');
+  const lettere = MARCHIO.lettere.filter((l) => tracciati.has(l.segno));
+
+  // stato di partenza: lettere con la forma del testo, il resto assente
+  lettere.forEach((l) => tracciati.get(l.segno).setAttribute('d', tracciaLettera(l, 0)));
+  ['anello', 'barraE'].forEach((k) => { if (tracciati.has(k)) tracciati.get(k).style.opacity = '0'; });
+  if (sottotitolo) sottotitolo.style.opacity = '0';
+  svg.style.opacity = '1';
+  svg.style.visibility = 'hidden'; // misurabile ma non ancora a schermo
+
+  // dove stanno adesso le lettere disegnate, e dove sta il nome scritto
+  const riquadroLettere = lettere
+    .map((l) => tracciati.get(l.segno).getBoundingClientRect())
+    .reduce((acc, r) => ({
+      left: Math.min(acc.left, r.left), right: Math.max(acc.right, r.right),
+      top: Math.min(acc.top, r.top), bottom: Math.max(acc.bottom, r.bottom),
+    }), { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity });
+
+  const nome = marca.getBoundingClientRect();
+  const scala = nome.width > 0 ? (riquadroLettere.right - riquadroLettere.left) / nome.width : 1;
+  const dx = (riquadroLettere.left + riquadroLettere.right) / 2 - (nome.left + nome.right) / 2;
+  const dy = (riquadroLettere.top + riquadroLettere.bottom) / 2 - (nome.top + nome.bottom) / 2;
+
+  // il nome raggiunge la posizione e la misura delle lettere disegnate
+  marca.animate(
+    [
+      { transform: 'translate(0, 0) scale(1)' },
+      { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${scala.toFixed(3)})` },
+    ],
+    {
+      duration: TEMPI.marcaDurata, delay: fineCaduta, easing: CURVE.approdo, fill: 'forwards',
+    },
+  );
+
+  const scambio = fineCaduta + TEMPI.marcaDurata;
+  const fineMorph = scambio + TEMPI.morphDurata;
+
+  const avvia = (ritardo, azione) => setTimeout(azione, ritardo);
+
+  avvia(scambio, () => {
+    marca.style.opacity = '0';
+    svg.style.visibility = 'visible';
+
+    const partito = performance.now();
+    const passo = (adesso) => {
+      const grezzo = Math.min((adesso - partito) / TEMPI.morphDurata, 1);
+      // stessa frenata delle altre battute, calcolata invece che dichiarata
+      const t = 1 - (1 - grezzo) ** 3;
+      lettere.forEach((l) => tracciati.get(l.segno).setAttribute('d', tracciaLettera(l, t)));
+      if (grezzo < 1) requestAnimationFrame(passo);
+    };
+    requestAnimationFrame(passo);
+  });
+
+  // l'anello si chiude attorno alle lettere mentre finiscono di formarsi
+  const anello = tracciati.get('anello');
+  if (anello) {
+    anello.animate(
+      [{ opacity: 0, transform: 'scale(0.94)' }, { opacity: 1, transform: 'scale(1)' }],
+      {
+        duration: TEMPI.anelloDurata,
+        delay: scambio + TEMPI.morphDurata * 0.45,
+        easing: CURVE.approdo,
+        fill: 'forwards',
+      },
+    );
+  }
+
+  const barra = tracciati.get('barraE');
+  if (barra) {
+    barra.animate(
+      [{ opacity: 0, transform: 'translateY(-2px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 260, delay: fineMorph - 120, easing: CURVE.approdo, fill: 'forwards' },
+    );
+  }
+
+  if (sottotitolo) {
+    sottotitolo.animate(
+      [{ opacity: 0 }, { opacity: 1 }],
+      { duration: 320, delay: fineMorph + 40, easing: CURVE.approdo, fill: 'forwards' },
+    );
+  }
+
+  return fineMorph + TEMPI.anelloDurata * 0.5;
+}
+
+// Il pannello parte dopo che il marchio si e composto e ha avuto la sua pausa.
+function ritardoUscita(marchioFermo) {
   return marchioFermo + TEMPI.marchioPausa;
 }
 
