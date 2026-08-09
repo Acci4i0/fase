@@ -426,7 +426,6 @@ function paginaAzienda() {
     + fasciaProdotto(`
     <div class="section testata testata--asciutta">
       <div class="testata__testo">
-        <p class="eyebrow">${p.occhiello}</p>
         <h1 class="pagina__titolo">${p.titolo}</h1>
       </div>
       ${media(p.immagine, p.placeholder, 'media--hero testata__foto', true)}
