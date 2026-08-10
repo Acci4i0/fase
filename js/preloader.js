@@ -14,16 +14,19 @@
 const CHIAVE_SESSIONE = 'faseIntroPlayed';
 
 const TEMPI = {
-  attesa: 200,          // nero, prima che accada qualcosa
-  scansione: 1000,      // la linea attraversa il marchio: deliberata, non rapida
-  taglineRitardo: 850,  // la tagline entra quando la scansione e all'85%
-  tagline: 350,
+  attesa: 180,          // nero, prima che accada qualcosa
+  scansione: 900,       // la linea attraversa il marchio: precisa, non lenta
+  taglineRitardo: 765,  // la tagline entra quando la scansione e all'85%
+  tagline: 340,
+  assestamento: 420,    // la scala si posa e si chiude con la scansione
   lineaSvanisce: 140,   // la linea supera il marchio e si spegne
-  respiro: 800,         // marchio completo e immobile: e il momento centrale
-  respiroStretto: 700,  // su schermi piccoli si accorcia, non si toglie
+  // Marchio completo e immobile: e il momento centrale dell'intro, e vale
+  // uguale su ogni schermo — accorciarlo su telefono toglierebbe proprio
+  // quello per cui l'intro esiste.
+  respiro: 750,
   volo: 600,            // il lockup raggiunge l'intestazione
-  sipario: 640,         // il nero si ritira verso l'alto
-  scambio: 110,         // incrocio col logo di navbar
+  sipario: 600,         // il nero si ritira verso l'alto
+  scambio: 120,         // incrocio col logo di navbar: e li che arriva il colore
 };
 
 const CURVE = {
@@ -63,19 +66,20 @@ function avviaIntro() {
   scansiona(marca, linea, lockup);
   entraTagline(tagline);
 
-  // Il marchio e completo quando l'ultima delle due cose ha finito: la linea
-  // che si spegne o la tagline che arriva. Da li parte la sosta, e solo dopo
-  // la sosta comincia l'uscita — prima il marchio, poi il sito.
+  // Prima il marchio, poi il sito: l'uscita parte solo a sosta finita.
+  // Tre cose finiscono in momenti diversi: la linea che si spegne, la tagline
+  // che arriva, la scala che si posa. La sosta comincia dopo l'ultima delle
+  // tre — se no non sarebbe immobilita, sarebbe una coda di movimento.
   const marchioCompleto = Math.max(
     TEMPI.attesa + TEMPI.scansione + TEMPI.lineaSvanisce,
     TEMPI.attesa + TEMPI.taglineRitardo + TEMPI.tagline,
+    TEMPI.attesa + TEMPI.scansione + 40,
   );
-  const sosta = window.innerWidth < 480 ? TEMPI.respiroStretto : TEMPI.respiro;
 
   setTimeout(() => {
     clearTimeout(salvagente);
     apriSipario(intro, lockup);
-  }, marchioCompleto + sosta);
+  }, marchioCompleto + TEMPI.respiro);
 }
 
 function giaVista() {
@@ -146,7 +150,10 @@ function scansiona(marca, linea, lockup) {
   lockup.animate(
     [{ transform: 'scale(0.99)' }, { transform: 'scale(1)' }],
     {
-      duration: 420, delay: parte + durata - 380, easing: CURVE.posa, fill: 'both',
+      duration: TEMPI.assestamento,
+      delay: parte + durata - (TEMPI.assestamento - 40),
+      easing: CURVE.posa,
+      fill: 'both',
     },
   );
 }
@@ -212,22 +219,21 @@ function portaAllIntestazione(lockup, logoNavbar) {
 
   document.body.classList.add('intro-in-volo');
 
-  // Il colore vira lungo il tragitto: bianco nell'intro, rosso del marchio
-  // all'arrivo. Cosi allo scambio i due sono gia identici.
-  const rosso = getComputedStyle(document.documentElement)
-    .getPropertyValue('--color-accent').trim() || '#A72B2A';
-
+  // Il marchio resta BIANCO per tutto il tragitto: l'intro e in bianco e nero
+  // fino all'ultimo, e il colore del sito deve arrivare tutto insieme. Virare
+  // il bianco verso il rosso lungo la strada sfumerebbe il confine fra le due
+  // cose, che invece devono restare distinte.
   const corsa = lockup.animate(
     [
-      { transform: 'translate(0, 0) scale(1)', color: '#FFF' },
-      {
-        transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${scala.toFixed(4)})`,
-        color: rosso,
-      },
+      { transform: 'translate(0, 0) scale(1)' },
+      { transform: `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${scala.toFixed(4)})` },
     ],
     { duration: TEMPI.volo, easing: CURVE.posa, fill: 'forwards' },
   );
 
+  // Arrivato a destinazione, lo scambio: il marchio bianco esce e il logo vero
+  // entra, nella stessa posizione e della stessa misura. E qui, e solo qui, che
+  // il colore del sito compare.
   corsa.addEventListener('finish', () => {
     lockup.animate([{ opacity: 1 }, { opacity: 0 }], { duration: TEMPI.scambio, fill: 'forwards' });
     document.body.classList.remove('intro-in-volo');

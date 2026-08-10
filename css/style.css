@@ -2247,7 +2247,7 @@ address {
   z-index: 200;
   display: grid;
   place-items: center;
-  background: #060606;
+  background: #000;
   /* Si apre verso l'alto: il bordo basso sale e scopre la home. */
   clip-path: inset(0 0 0 0);
 }
@@ -2313,10 +2313,10 @@ address {
   position: absolute;
   top: 3%;
   left: 0;
-  width: 2px;
+  width: 1px;
   height: 91%;
   background: #FFF;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.25);
   opacity: 0;
   will-change: transform;
 }
