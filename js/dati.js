@@ -8,7 +8,6 @@ const DATI = {
     paese: 'Italia',
     telefono: '+39 0424 561848',
     telefonoHref: 'tel:+390424561848',
-    fax: '+39 0424 564560',
     email: 'info@fasemec.com',
     logo: 'img/logo-FASE-1.png',
     // Il marchio senza payoff, per la fascia di chiusura: sono i sei tracciati

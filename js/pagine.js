@@ -37,7 +37,7 @@ function fasciaProdotto(contenuto) {
   return `<div class="fascia-prodotto">${contenuto}</div>`;
 }
 
-// Puntinato dello stesso tratto della mappa Sedi: dà fondo al bianco dietro le
+// Puntinato dello stesso tratto della mappa della Sede: dà fondo al bianco dietro le
 // card senza aggiungere un'immagine da caricare.
 function fasciaPunteggiata(contenuto) {
   return `<div class="fascia-punteggiata">${contenuto}</div>`;
@@ -494,7 +494,7 @@ function sezioneProfilo(sezione) {
 
 // Solo il modulo. Intestazione, recapiti e collegamento alla mappa sono stati
 // tolti: i recapiti stanno gia nel pie di pagina di ogni pagina e nella sezione
-// Sedi di home e Azienda, quindi qui erano la terza copia. Restano nei dati.
+// Sede di home e Azienda, quindi qui erano la terza copia. Restano nei dati.
 function paginaContatti() {
   const p = DATI.pagine.contatti;
 

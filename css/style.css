@@ -1405,16 +1405,22 @@ address {
   line-height: var(--leading-title);
 }
 
-/* Il riquadro sta sopra al planisfero, quindi non deve coprirlo: su telefono
-   resta stretto e compatto, e i puntini si vedono tutt'intorno. Cresce solo
-   dove c'è spazio da spartire. */
+/* Il riquadro sta sopra al planisfero, quindi non deve coprirlo: resta compatto
+   e i puntini si vedono tutt'intorno. Cresce solo dove c'è spazio da spartire.
+
+   Quadrato a ogni larghezza. Il contenuto è impilato e centrato in verticale:
+   accostare la sigla del paese all'indirizzo, come prima, dentro un quadrato
+   lascerebbe vuota mezza figura. La misura è scelta perché il testo ci stia
+   sempre con margine — verificato da 320 a 2560 — così il quadrato non deve mai
+   cedere per non tagliare le righe. */
 
 .locations__panel {
   display: grid;
-  gap: var(--space-2);
-  width: 100%;
-  max-width: 272px;
-  padding: var(--space-5) var(--space-5);
+  align-content: center;
+  gap: var(--space-4);
+  width: min(100%, 272px);
+  aspect-ratio: 1;
+  padding: var(--space-6);
   background: var(--color-page);
   box-shadow: var(--shadow-panel);
   font-size: var(--font-small);
@@ -1456,14 +1462,24 @@ address {
   padding: 0 var(--page-gutter);
 }
 
-/* Due colonne che stanno insieme come un gruppo. Non si distribuiscono sulla
-   larghezza piena: la seconda finirebbe isolata al margine destro e il piede si
-   leggerebbe come due cose lontane invece che come un blocco. */
+/* Tre colonne: da 768 in su una a sinistra, una al centro della pagina e una a
+   destra. La colonna centrale sta al centro davvero — 1fr auto 1fr la incolonna
+   sulla mezzeria — mentre le laterali si ancorano ai due margini. Il testo resta
+   allineato a sinistra in tutte e tre: e l'allineamento interno a tenerle
+   coerenti fra loro, non la posizione nella riga.
+
+   Sotto i 768 i due elenchi si affiancano e i recapiti prendono la riga intera:
+   la mail non entrerebbe in mezza colonna. */
 
 .footer-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-8) var(--space-6);
+}
+
+.footer-column:last-child {
+  grid-column: 1 / -1;
+  font-style: normal;
 }
 
 .footer-column__links {
@@ -1723,30 +1739,31 @@ address {
   }
 
   .locations__panel {
-    grid-template-columns: auto 1fr;
-    gap: var(--space-10);
-    align-items: center;
-    max-width: 620px;
-    padding: var(--space-10) var(--space-10);
+    width: min(100%, 360px);
+    gap: var(--space-5);
+    padding: var(--space-10);
   }
 
   .locations__address {
-    padding-top: 0;
-    padding-left: var(--space-10);
-    border-top: 0;
-    border-left: 1px solid var(--color-line);
+    padding-top: var(--space-5);
   }
 
-  /* Tre colonne di larghezza fissa, allineate a sinistra: il gruppo si chiude
-     dopo la terza invece di distendersi fino al margine destro. */
   .footer-columns {
-    grid-template-columns: repeat(2, minmax(0, 15rem));
-    justify-content: start;
-    gap: var(--space-12);
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-10);
   }
 
   .footer-column:first-child {
+    justify-self: start;
+  }
+
+  .footer-column:nth-child(2) {
+    justify-self: center;
+  }
+
+  .footer-column:last-child {
     grid-column: auto;
+    justify-self: end;
   }
 }
 
@@ -1762,10 +1779,6 @@ address {
 
   .hero {
     max-width: 1300px;
-  }
-
-  .locations__panel {
-    max-width: 720px;
   }
 
   .cards__slide {

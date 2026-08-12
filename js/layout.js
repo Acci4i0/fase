@@ -14,7 +14,7 @@ function percorso(riferimento) {
 
 function montaLayoutCondiviso() {
   sostituisci('[data-layout-header]', intestazione() + menuSovrapposto());
-  sostituisci('[data-layout-sedi]', sezioneSedi());
+  sostituisci('[data-layout-sede]', sezioneSede());
   sostituisci('[data-layout-footer]', piePagina());
   sostituisci('[data-layout-fascia]', fasciaMarchio());
   avviaMappaDelMondo();
@@ -92,14 +92,14 @@ function paginaCorrente() {
   return window.location.pathname.split('/').pop() || 'index.html';
 }
 
-function sezioneSedi() {
+function sezioneSede() {
   const a = DATI.azienda;
   return `
-  <section class="section locations" aria-labelledby="titolo-sedi">
+  <section class="section locations" aria-labelledby="titolo-sede">
     <canvas class="locations__map" data-mappa-mondo aria-hidden="true"></canvas>
 
     <div class="locations__content">
-      <h2 class="locations__title" id="titolo-sedi">Sedi</h2>
+      <h2 class="locations__title" id="titolo-sede">Sede</h2>
 
       <div class="locations__panel">
         <p class="locations__country">IT</p>
@@ -109,7 +109,6 @@ function sezioneSedi() {
           ${a.via}<br>
           ${a.citta}<br>
           T. ${a.telefono}<br>
-          F. ${a.fax}<br>
           ${a.email}
         </address>
       </div>
@@ -120,15 +119,12 @@ function sezioneSedi() {
   </section>`;
 }
 
-// Due colonne di link e una riga di chiusura. I recapiti non stanno piu qui:
-// erano gli stessi della sezione Sedi, che sulla home la precede di poco. Nelle
-// pagine senza Sedi la via al contatto resta il link Contatti nella colonna
-// Azienda.
+// Tre colonne e una riga di chiusura: due di collegamenti e una di recapiti,
+// tutti e tre raggiungibili con un tocco — mail, telefono e posizione.
 //
-// Le intestazioni non ci sono: con due o tre voci per colonna erano
-// impalcatura, e il gruppo si legge senza. Restano pero come aria-label sui
-// <nav>, se no chi ascolta la pagina trova due elenchi di link senza sapere di
-// cosa.
+// Le intestazioni non ci sono: con tre voci per colonna erano impalcatura, e il
+// gruppo si legge senza. Restano pero come aria-label, se no chi ascolta la
+// pagina trova tre elenchi di link senza sapere di cosa.
 function piePagina() {
   const a = DATI.azienda;
   return `
@@ -140,6 +136,15 @@ function piePagina() {
       <nav class="footer-column" aria-label="${c.titolo}">
         ${elencoLink(c.voci)}
       </nav>`).join('')}
+
+      <address class="footer-column" aria-label="Recapiti">
+        <ul class="footer-column__links">
+          <li><a href="mailto:${a.email}">${a.email}</a></li>
+          <li><a href="${a.telefonoHref}">T. ${a.telefono}</a></li>
+          <li><a href="${a.mappa}" target="_blank" rel="noopener"
+                 aria-label="Posizione della sede su Google Maps, si apre in una nuova scheda">Posizione</a></li>
+        </ul>
+      </address>
     </div>
 
     <hr class="site-footer__divider">
