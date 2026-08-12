@@ -21,55 +21,60 @@ che erano finite rispettivamente sulla card Centrifughe e sulla scheda FD: sono
 uscite dal sito insieme alle altre attribuzioni per somiglianza, vedi la sezione
 qui sotto.
 
-## schede macchina — l'immagine della pagina prodotto ufficiale
+## schede macchina — solo fotografie, e solo dove l'attribuzione è dimostrata
 
-**Regola: ogni scheda porta l'immagine che fasemec.com pubblica nella pagina di
-quel modello. Nessun abbinamento per somiglianza.**
+**Due regole, in quest'ordine.**
 
-Per un periodo qui sono state usate le foto del committente al posto di queste
-immagini, perché sono fotografie e non render. L'attribuzione però si reggeva sul
-confronto fra la sagoma della foto e il render omonimo: un'inferenza, non una
-prova. Nessun file della libreria del committente — PNG a nome UUID, senza
-metadati — dichiara il proprio modello, quindi quelle attribuzioni non erano
-verificabili e sono state ritirate.
+1. **Nel sito non compare nessun render.** Né i render poveri di fasemec.com, né
+   i render CAD presenti nella libreria del committente: in `img/immagini/` ci
+   sono entrambe le cose mescolate, e vanno usate solo le fotografie.
+2. **Una foto va su una scheda solo se ritrae quel macchinario.** Dove non è
+   dimostrabile, va un placeholder nero — mai un ripiego per somiglianza.
 
-Le nove immagini qui sotto invece lo sono: ognuna sta nel corpo della pagina di
-quel modello, nella stessa posizione strutturale (`wpb_single_image`, la prima
-immagine di contenuto). Le pagine `/products/…` non sono più in linea — il
-catalogo pubblico oggi si ferma alle tre pagine di famiglia — ma restano
-consultabili nell'Internet Archive, snapshot del 18 settembre 2021, ed è da lì
-che è stato ricavato l'abbinamento. L'elenco «prodotto» in fondo a questo file,
-raccolto quando le pagine erano ancora in linea, lo conferma riga per riga.
+### come si distingue una foto da un render
 
-Sono render CAD, non fotografie: è ciò che Fase pubblica come immagine di
-prodotto. Per FD e FC il render è una **sezione**, che mostra la macchina
-tagliata invece che di tre quarti.
+Nessuna misura automatica funziona: i file del committente sono tutti ad alta
+qualità, e sia la grana del sensore sia la frazione di intorni 3×3 identici
+danno lo stesso valore per gli uni e per gli altri. Si decide **guardando il
+dettaglio a grandezza reale**, dove la differenza è netta:
 
-| file usato nel sito | pagina prodotto ufficiale | macchina |
-|---|---|---|
-| su-grigio/SEZIONE-CENTRIFUGHE-FD.jpg | /products/disoleatrici-a-ciclo-continuo-serie-fd/ | serie FD (sezione) |
-| su-grigio/FC.jpg | /products/centrifughe-asciugatrici-serie-fc/ | serie FC (sezione) |
-| su-grigio/FCV480.jpg | /products/centrifughe-asciugatrici-serie-fcv/ | serie FCV |
-| su-grigio/imgDK.jpg | /products/disoleatrici-serie-dk/ | serie DK |
-| su-grigio/IMP-a-ciclo-continuo.jpg | /products/impianti-di-trattamento-trucioli-metallici-a-ciclo-continuo/ | impianto a ciclo continuo |
-| su-grigio/trattamento-truciolo-imp.jpg | /products/impianti-di-trattamento-trucioli-metallici-a-paniere-estraibile/ | impianto a paniere estraibile |
-| su-grigio/IMP-a-paniere-estraibile2.jpg | /products/impianti-di-asciugatura-a-paniere-estraibile-in-ambiente-galvanico/ | impianto in ambiente galvanico |
-| su-grigio/trituratore-orizzontale.jpg | /products/trituratori-ad-asse-orrizzontale-serie-tr/ | serie TR |
-| su-grigio/trituratori-verticali.jpg | /products/trituratori-ad-asse-verticale-serie-trw/ | serie TRW |
+- foto: etichette stampate con imperfezioni di posa, alluminio di fusione con la
+  sua grana, inox con striature anisotrope, cavi, polvere, ossidazioni
+- render: superfici uniformi, marchio come decalco piatto, geometria perfetta,
+  nessuna usura
 
-⚠️ Due nomi di file mentono, e vanno letti solo attraverso la tabella:
-`IMP-a-paniere-estraibile2.jpg` è l'immagine dell'impianto **galvanico** (il cui
-titolo ufficiale contiene a sua volta «a paniere estraibile»), mentre l'impianto
-a paniere estraibile semplice è `trattamento-truciolo-imp.jpg`.
+Render individuati nella libreria, da non usare mai: `4F6B3D04` (fusto crema),
+`D9C65FBB`, `F58741CC`, e i cinque impianti completi `0084D093`, `8046D52F`,
+`C0A3B8BF`, `10CB692E`, `1C07E13D`.
 
-Le copertine di famiglia restano render del committente: non dichiarano un
-modello, quindi non c'è attribuzione da verificare.
+### come si dimostra l'attribuzione
 
-| file usato nel sito | originale | dove compare |
-|---|---|---|
-| su-grigio/cop-centrifughe.jpg | F247E8A4-…png | copertina Centrifughe |
-| su-grigio/cop-impianti.jpg | 0084D093-…png | copertina Impianti |
-| su-grigio/cop-trituratori.jpg | 585B6C3D-… 2.PNG | copertina Trituratori |
+Le immagini che fasemec.com pubblicava in `/products/…` — fuori linea, riprese
+dall'Internet Archive (18 settembre 2021) e tenute in locale col nome originale
+— **non entrano in pagina**, sono render. Servono come riferimento: stabiliscono
+che aspetto ha ciascun modello. Una foto del committente si attribuisce quando
+mostra inequivocabilmente la stessa macchina, per dettagli costruttivi
+specifici, non per categoria.
+
+| file usato nel sito | originale | macchina | su cosa si regge |
+|---|---|---|---|
+| su-grigio/fd-serie.jpg | FF29D76E-…png | serie FD | unica delle quattro senza coperchio apribile né cesto estraibile: imbuto fisso in sommità e portello di ispezione removibile con maniglie, la prima caratteristica dichiarata. È la macchina a ciclo continuo |
+| su-grigio/fc-serie.jpg | 59CF6564-…png | serie FC | base in fusione verde acqua con flangia lobata e trave a destra che porta il motore esterno, come nel riferimento; e il cilindro di apertura del coperchio: «apertura assistita da cilindro a gas». Le gemelle `477418F6` e `CD324ADB` hanno base grigia e staffa arcuata al posto del cilindro |
+| su-grigio/fcv-serie.jpg | D69C9AC3-…PNG | serie FCV | sagoma unica in tutta la libreria: corpo bulboso su piedistallo cilindrico, base a tre lobi, staffa arcuata, scatola comandi e armadio sul braccio nelle stesse posizioni del riferimento |
+| su-grigio/trw-serie.jpg | 71110583-…PNG | serie TRW | stesse barre dentate della camera di taglio, stesso corpo trapezoidale, stesso motore blu laterale, stesso telaio. Il riferimento è senza tramoggia per mostrare il rotore; qui c'è, e «accoglie un intero cassone» |
+| su-grigio/imp-paniere-serie.jpg | E27042DB-…png | impianto a paniere estraibile | portale su tre panieri separati alimentati da tramoggia per truciolo: «più materiali trattati senza contaminazione». Niente rotobarili, quindi non è il galvanico; batch, quindi non è il ciclo continuo |
+
+### placeholder nero — attribuzione non dimostrabile
+
+| macchina | perché |
+|---|---|
+| serie DK | le sospensioni divaricate su piastra, che sembravano la sua firma, sono un tratto di famiglia: le hanno anche `D5CC4107`, `4C7480F1`, `F247E8A4`, `81F7F726`. Nessuna foto si distingue per un dettaglio proprio della DK, e l'unico fusto crema con quella base (`4F6B3D04`) è un render |
+| serie TR | nessuna foto lo mostra da solo. Compare come metà sinistra del sistema combinato `B141BDF0`, riconoscibile per corpo scatolare e motoriduttore in asse, ma è l'immagine di un impianto |
+| impianto a ciclo continuo | tutte le immagini di impianto a ciclo continuo in libreria sono render |
+| impianto in ambiente galvanico | candidata `43510D0D`: paniere a foratura fine preso da pinza automatica accanto a una centrifuga con manicotto d'aria calda — asciugatura, carico automatico, paniere estraibile. Manca però la prova dell'ambiente galvanico: la lettura si regge sul tipo di foratura del cesto, non su un riscontro |
+
+Le copertine di famiglia restano quelle attuali: non dichiarano un modello,
+quindi non c'è attribuzione da verificare.
 
 ## img/soluzioni/ — foto d'ambiente per Applicazioni e Settori
 

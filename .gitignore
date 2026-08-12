@@ -34,11 +34,22 @@ ANALYSIS.md
 # Immagini superate dalle iterazioni precedenti: nessuna pagina le richiama
 # più. Restano sul disco come archivio, fuori dal repository.
 #
-# I nove render qui sotto erano le immagini delle schede macchina fino alla
-# revisione delle foto prodotto: sono render Fase autentici, ma nulla li lega
-# a un modello preciso. Al loro posto ora ci sono le immagini pubblicate dalle
-# rispettive pagine prodotto di fasemec.com, che portano il nome originale del
-# file (FC.jpg, imgDK.jpg, SEZIONE-CENTRIFUGHE-FD.jpg…) e sono nel repository.
+# Le nove qui sotto col nome originale di fasemec.com (FC.jpg, imgDK.jpg,
+# SEZIONE-CENTRIFUGHE-FD.jpg…) sono le immagini che il sito ufficiale pubblica
+# per ciascun modello. Non entrano più in pagina — sono render poveri — ma
+# restano in locale: sono la prova di quale macchina sia quale, cioè il
+# riferimento con cui vengono attribuiti i render del committente.
+img/su-grigio/FC.jpg
+img/su-grigio/FCV480.jpg
+img/su-grigio/imgDK.jpg
+img/su-grigio/SEZIONE-CENTRIFUGHE-FD.jpg
+img/su-grigio/IMP-a-ciclo-continuo.jpg
+img/su-grigio/IMP-a-paniere-estraibile2.jpg
+img/su-grigio/trattamento-truciolo-imp.jpg
+img/su-grigio/trituratore-orizzontale.jpg
+img/su-grigio/trituratori-verticali.jpg
+#
+# Attribuzioni ritirate: assegnate per somiglianza di sagoma, senza riscontro.
 img/hero/02-disoleatrice-ciclo-continuo.jpg
 img/su-grigio/fd-ciclo-continuo.jpg
 img/su-grigio/fc-cesto-estraibile.jpg
