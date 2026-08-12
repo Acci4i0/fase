@@ -15,36 +15,61 @@ versioni JPEG ricompresse elencate qui sotto.
 | hero/05-linea-paniere-estraibile.jpg | AA196379-1851-40DA-9F3A-A6B06A6F3432.png | hero, slide settori |
 | sede-fase.jpg | 32EEBF70-CB16-41DD-BD0B-93BFF024CFD4.png | azienda.html, banda del profilo |
 
-| su-grigio/centrifuga.jpg | 4C7480F1-E4B5-4610-9477-79DBBB820F47.png | card del sistema Centrifughe |
-| su-grigio/disoleatrice-ciclo-continuo.jpg | 0BFCBC22-747A-41C5-9E70-FC723C9AAC7A.png | scheda serie FD |
+Le altre foto della cartella restano disponibili e non sono usate. Fra queste
+`centrifuga.jpg` (4C7480F1…) e `disoleatrice-ciclo-continuo.jpg` (0BFCBC22…),
+che erano finite rispettivamente sulla card Centrifughe e sulla scheda FD: sono
+uscite dal sito insieme alle altre attribuzioni per somiglianza, vedi la sezione
+qui sotto.
 
-Le altre 8 foto della cartella restano disponibili e non sono ancora usate.
+## schede macchina — l'immagine della pagina prodotto ufficiale
 
-## foto reali al posto dei render — schede prodotto e copertine di catalogo
+**Regola: ogni scheda porta l'immagine che fasemec.com pubblica nella pagina di
+quel modello. Nessun abbinamento per somiglianza.**
 
-I file `FC.jpg`, `FCV480.jpg`, `imgDK.jpg`, `IMP-*.jpg`, `trattamento-truciolo-imp.jpg`,
-`trituratore-orizzontale.jpg` e `trituratori-verticali.jpg` scaricati da fasemec.com
-sono render CAD, non fotografie. Restano in `img/immagini/` come riferimento per il
-riconoscimento dei modelli, ma non entrano più nel sito: al loro posto vanno le foto
-del committente, rimontate sul grigio con `probe/su-grigio2.js`.
+Per un periodo qui sono state usate le foto del committente al posto di queste
+immagini, perché sono fotografie e non render. L'attribuzione però si reggeva sul
+confronto fra la sagoma della foto e il render omonimo: un'inferenza, non una
+prova. Nessun file della libreria del committente — PNG a nome UUID, senza
+metadati — dichiara il proprio modello, quindi quelle attribuzioni non erano
+verificabili e sono state ritirate.
 
-L'attribuzione modello per modello è stata fatta confrontando la sagoma di ogni foto
-con il render omonimo e con le caratteristiche pubblicate in `js/dati.js`.
+Le nove immagini qui sotto invece lo sono: ognuna sta nel corpo della pagina di
+quel modello, nella stessa posizione strutturale (`wpb_single_image`, la prima
+immagine di contenuto). Le pagine `/products/…` non sono più in linea — il
+catalogo pubblico oggi si ferma alle tre pagine di famiglia — ma restano
+consultabili nell'Internet Archive, snapshot del 18 settembre 2021, ed è da lì
+che è stato ricavato l'abbinamento. L'elenco «prodotto» in fondo a questo file,
+raccolto quando le pagine erano ancora in linea, lo conferma riga per riga.
 
-| file usato nel sito | originale | macchina | su cosa si regge l'attribuzione |
-|---|---|---|---|
-| su-grigio/fd-ciclo-continuo.jpg | FF29D76E-…png | serie FD | corpo cilindrico con bocchettone in alto: «il materiale entra dalla parte alta» |
-| su-grigio/fc-cesto-estraibile.jpg | 59CF6564-…png | serie FC | fusto inox AISI 304 e cilindro di apertura del coperchio, basamento nel verde acqua del render FC |
-| su-grigio/fcv-verticale.jpg | D69C9AC3-…PNG | serie FCV | sagoma identica al render FCV480: basamento rastremato, quadro elettrico a bordo |
-| su-grigio/dk-cesto-estraibile.jpg | D5CC4107-…png | serie DK | stessa macchina che in 775371C8 compare con bandiera e paranco, accessorio elencato solo per la DK |
-| su-grigio/imp-ciclo-continuo.jpg | 8046D52F-…png | impianto a ciclo continuo | silo, tramoggia e centrifuga in cabina |
-| su-grigio/imp-paniere-estraibile.jpg | E27042DB-…png | impianto a paniere estraibile | vasche di raccolta e portale di movimentazione |
-| su-grigio/imp-galvanico.jpg | 43510D0D-…PNG | impianto in ambiente galvanico | paniere sollevato dalla pinza accanto alla centrifuga di asciugatura |
-| su-grigio/tr-orizzontale.jpg | 71110583-…PNG | serie TR | rotore ad asse orizzontale con motore in linea, tramoggia piramidale |
-| su-grigio/trw-verticale.jpg | 9061426D-…PNG | serie TRW | motore in asse verticale e spintore idraulico laterale, citato nella scheda TRW |
-| su-grigio/cop-centrifughe.jpg | F247E8A4-…png | copertina Centrifughe | copertina di categoria, non attribuita a un modello |
-| su-grigio/cop-impianti.jpg | 0084D093-…png | copertina Impianti | idem |
-| su-grigio/cop-trituratori.jpg | 585B6C3D-… 2.PNG | copertina Trituratori | idem |
+Sono render CAD, non fotografie: è ciò che Fase pubblica come immagine di
+prodotto. Per FD e FC il render è una **sezione**, che mostra la macchina
+tagliata invece che di tre quarti.
+
+| file usato nel sito | pagina prodotto ufficiale | macchina |
+|---|---|---|
+| su-grigio/SEZIONE-CENTRIFUGHE-FD.jpg | /products/disoleatrici-a-ciclo-continuo-serie-fd/ | serie FD (sezione) |
+| su-grigio/FC.jpg | /products/centrifughe-asciugatrici-serie-fc/ | serie FC (sezione) |
+| su-grigio/FCV480.jpg | /products/centrifughe-asciugatrici-serie-fcv/ | serie FCV |
+| su-grigio/imgDK.jpg | /products/disoleatrici-serie-dk/ | serie DK |
+| su-grigio/IMP-a-ciclo-continuo.jpg | /products/impianti-di-trattamento-trucioli-metallici-a-ciclo-continuo/ | impianto a ciclo continuo |
+| su-grigio/trattamento-truciolo-imp.jpg | /products/impianti-di-trattamento-trucioli-metallici-a-paniere-estraibile/ | impianto a paniere estraibile |
+| su-grigio/IMP-a-paniere-estraibile2.jpg | /products/impianti-di-asciugatura-a-paniere-estraibile-in-ambiente-galvanico/ | impianto in ambiente galvanico |
+| su-grigio/trituratore-orizzontale.jpg | /products/trituratori-ad-asse-orrizzontale-serie-tr/ | serie TR |
+| su-grigio/trituratori-verticali.jpg | /products/trituratori-ad-asse-verticale-serie-trw/ | serie TRW |
+
+⚠️ Due nomi di file mentono, e vanno letti solo attraverso la tabella:
+`IMP-a-paniere-estraibile2.jpg` è l'immagine dell'impianto **galvanico** (il cui
+titolo ufficiale contiene a sua volta «a paniere estraibile»), mentre l'impianto
+a paniere estraibile semplice è `trattamento-truciolo-imp.jpg`.
+
+Le copertine di famiglia restano render del committente: non dichiarano un
+modello, quindi non c'è attribuzione da verificare.
+
+| file usato nel sito | originale | dove compare |
+|---|---|---|
+| su-grigio/cop-centrifughe.jpg | F247E8A4-…png | copertina Centrifughe |
+| su-grigio/cop-impianti.jpg | 0084D093-…png | copertina Impianti |
+| su-grigio/cop-trituratori.jpg | 585B6C3D-… 2.PNG | copertina Trituratori |
 
 ## img/soluzioni/ — foto d'ambiente per Applicazioni e Settori
 
@@ -86,9 +111,13 @@ ritaglio e nessuna maschera, solo una scala dei livelli, quindi ombre e
 sfumature restano continue. Gli originali scaricati da fasemec.com restano in
 `img/` intatti; le foto del committente restano in `img/immagini/`.
 
-Non ci sono più: `SEZIONE-CENTRIFUGHE-FD.jpg` aveva fondo sfumato e pavimento a
-specchio incorporati nel render, che una scala dei livelli non può appiattire.
-Al suo posto le due foto studio elencate sopra.
+`SEZIONE-CENTRIFUGHE-FD.jpg` fa eccezione: ha fondo sfumato e pavimento a specchio
+incorporati nel render, che una scala dei livelli non sa appiattire — per questo
+in passato era stato scartato. È stato rimontato con un criterio topologico
+invece che per soglia: il fondo è la regione chiara **connessa ai bordi**, quindi
+il gradiente se ne va tutto e il soggetto resta intatto, senza maschere disegnate
+a mano. Il riflesso a pavimento è connesso alla macchina e non è separabile: resta,
+come nel render pubblicato.
 
 # Immagini scaricate da fasemec.com — nome file → pagine di origine
 

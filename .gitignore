@@ -21,7 +21,6 @@ img/immagini/*
 !img/immagini/IMG2-6.jpg
 !img/immagini/IMG3-6.jpg
 !img/immagini/sede-fase.jpg
-!img/immagini/trattamento-truciolo-imp-1.jpg
 !img/immagini/trituratori-verticali.jpg
 
 # Fotografie di riferimento raccolte in fase di studio, mai finite in pagina.
@@ -34,17 +33,24 @@ ANALYSIS.md
 
 # Immagini superate dalle iterazioni precedenti: nessuna pagina le richiama
 # più. Restano sul disco come archivio, fuori dal repository.
+#
+# I nove render qui sotto erano le immagini delle schede macchina fino alla
+# revisione delle foto prodotto: sono render Fase autentici, ma nulla li lega
+# a un modello preciso. Al loro posto ora ci sono le immagini pubblicate dalle
+# rispettive pagine prodotto di fasemec.com, che portano il nome originale del
+# file (FC.jpg, imgDK.jpg, SEZIONE-CENTRIFUGHE-FD.jpg…) e sono nel repository.
 img/hero/02-disoleatrice-ciclo-continuo.jpg
-img/su-grigio/FC.jpg
-img/su-grigio/FCV480.jpg
-img/su-grigio/IMP-a-ciclo-continuo.jpg
-img/su-grigio/IMP-a-paniere-estraibile2.jpg
-img/su-grigio/imgDK.jpg
+img/su-grigio/fd-ciclo-continuo.jpg
+img/su-grigio/fc-cesto-estraibile.jpg
+img/su-grigio/fcv-verticale.jpg
+img/su-grigio/dk-cesto-estraibile.jpg
+img/su-grigio/imp-ciclo-continuo.jpg
+img/su-grigio/imp-paniere-estraibile.jpg
+img/su-grigio/imp-galvanico.jpg
+img/su-grigio/tr-orizzontale.jpg
+img/su-grigio/trw-verticale.jpg
 img/su-grigio/centrifuga.jpg
 img/su-grigio/disoleatrice-ciclo-continuo.jpg
-img/su-grigio/trattamento-truciolo-imp.jpg
-img/su-grigio/trituratore-orizzontale.jpg
-img/su-grigio/trituratori-verticali.jpg
 img/su-grigio/app-asciugatura.jpg
 img/su-grigio/app-frantumazione.jpg
 img/su-grigio/app-linea.jpg
