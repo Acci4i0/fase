@@ -1587,10 +1587,12 @@ address {
      seguono questo unico valore. 15vw riempie la fascia a ogni larghezza
      senza che serva un breakpoint. */
   font-size: clamp(76px, 15vw, 260px);
-  /* Piu bassa delle maiuscole: quel che avanza sborda e viene nascosto. E lo
-     stesso overflow che trattiene il nastro, largo piu della pagina, senza
-     che compaia una barra di scorrimento orizzontale. */
-  height: 0.56em;
+  /* Poco piu bassa delle maiuscole, che qui misurano 0.662em: sotto se ne
+     perde un'unghia e il resto si legge tutto. A 0.56em ne restava fuori
+     quasi un quarto e la parola sembrava mozzata invece che tagliata dal
+     bordo. E lo stesso overflow che trattiene il nastro, largo piu della
+     pagina, senza che compaia una barra di scorrimento orizzontale. */
+  height: 0.63em;
   overflow: hidden;
   background: var(--color-surface);
 }
@@ -1599,8 +1601,9 @@ address {
   display: flex;
   width: max-content;
   /* Alza le maiuscole verso il bordo alto: sopra resta un filo d'aria, sotto
-     il taglio. */
-  margin-top: -0.1em;
+     il taglio. Il valore e empirico — con line-height 1 le maiuscole non
+     partono dal bordo della riga — ed e verificato sui pixel resi. */
+  margin-top: -0.115em;
   animation: fascia-scorre 72s linear infinite;
 }
 
