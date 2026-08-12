@@ -37,6 +37,7 @@
   --leading-body: 1.6;
   --leading-read: 1.7; /* blocchi di prosa lunga */
   --tracking-label: 0.12em;
+  --tracking-display: -0.035em; /* scala display: le lettere vanno strette */
 
   --space-1: 4px;
   --space-2: 8px;
@@ -1572,6 +1573,67 @@ address {
   margin-top: var(--space-6);
   color: var(--color-muted);
   font-size: var(--font-tiny);
+}
+
+/* ------------------------------------------------------------------ */
+/* Fascia di chiusura. Il nome a scala display che scorre sotto il piede:
+   chiude la pagina come un marchio impresso sul fondo, non come un blocco
+   appoggiato dopo. Tiene il grigio del piede, cosi le due fasce si leggono
+   come una sola cosa, e le lettere escono in basso dal bordo e restano
+   tagliate. Decorativa: il nome e gia nell'intestazione e nel piede. */
+
+.fascia {
+  /* La misura di tutto sta qui: altezza, spaziature e taglio sono in em, e
+     seguono questo unico valore. 15vw riempie la fascia a ogni larghezza
+     senza che serva un breakpoint. */
+  font-size: clamp(76px, 15vw, 260px);
+  /* Piu bassa delle maiuscole: quel che avanza sborda e viene nascosto. E lo
+     stesso overflow che trattiene il nastro, largo piu della pagina, senza
+     che compaia una barra di scorrimento orizzontale. */
+  height: 0.56em;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.fascia__nastro {
+  display: flex;
+  width: max-content;
+  /* Alza le maiuscole verso il bordo alto: sopra resta un filo d'aria, sotto
+     il taglio. */
+  margin-top: -0.1em;
+  animation: fascia-scorre 72s linear infinite;
+}
+
+.fascia__voce {
+  color: var(--color-ink);
+  font-weight: 900;
+  line-height: 1;
+  /* Il tracking delle etichette (0.12em) qui sfalderebbe la parola: a scala
+     display le lettere vanno strette, se no il nome non si legge come un
+     blocco unico. */
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-inline-end: 0.24em;
+}
+
+/* Due meta identiche, quindi -50% e esattamente la larghezza della prima: a
+   fine giro la seconda si trova dove stava la prima e il raccordo non esiste
+   come momento. Solo transform: nessun ricalcolo di layout. */
+
+@keyframes fascia-scorre {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Movimento ridotto: la striscia si ferma. La regola generale piu in alto
+   azzera gia la durata, qui si toglie l'animazione del tutto cosi il nastro
+   resta al punto di partenza e la parola si legge dall'inizio. */
+
+@media (prefers-reduced-motion: reduce) {
+  .fascia__nastro {
+    animation: none;
+  }
 }
 
 @media (min-width: 768px) {

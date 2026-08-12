@@ -1,6 +1,11 @@
 // Le pagine macchina stanno in prodotti/: tutti i percorsi generati vanno risaliti di un livello.
 const RADICE = window.location.pathname.includes('/prodotti/') ? '../' : '';
 
+// Ripetizioni del nome in ciascuna meta della fascia di chiusura. Va dichiarata
+// qui: il montaggio parte subito sotto, e una const letta piu in basso nel file
+// non sarebbe ancora inizializzata.
+const RIPETIZIONI_FASCIA = 2;
+
 montaLayoutCondiviso();
 
 function percorso(riferimento) {
@@ -11,6 +16,7 @@ function montaLayoutCondiviso() {
   sostituisci('[data-layout-header]', intestazione() + menuSovrapposto());
   sostituisci('[data-layout-sedi]', sezioneSedi());
   sostituisci('[data-layout-footer]', piePagina());
+  sostituisci('[data-layout-fascia]', fasciaMarchio());
   avviaMappaDelMondo();
 }
 
@@ -150,6 +156,23 @@ function piePagina() {
 
   </div>
 </footer>`;
+}
+
+// Fascia di chiusura della home: il nome disteso a scala display, in scorrimento
+// continuo. E decorativa — il nome sta gia nell'intestazione, nel piede e nel
+// titolo della pagina — quindi resta fuori dall'ordine di lettura.
+//
+// Due meta identiche, e l'animazione trasla di -50%: a fine giro la seconda si
+// trova esattamente dove stava la prima, quindi il raccordo non esiste come
+// momento. Perche non si apra un vuoto a destra, una meta deve essere piu larga
+// dello schermo: due ripetizioni bastano dai 320px ai 2560px, verificato.
+function fasciaMarchio() {
+  const voce = `<span class="fascia__voce">${DATI.azienda.nome}</span>`;
+  const meta = voce.repeat(RIPETIZIONI_FASCIA);
+  return `
+<div class="fascia" aria-hidden="true">
+  <div class="fascia__nastro">${meta}${meta}</div>
+</div>`;
 }
 
 function colonnaFooter(slug, titolo, contenuto) {
