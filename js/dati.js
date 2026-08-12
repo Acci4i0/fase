@@ -59,17 +59,13 @@ const DATI = {
   ],
 
   footer: {
-    rapidi: [
-      { testo: 'Contatti', href: 'contatti.html' },
-      { testo: 'News', href: 'news.html' },
-    ],
     colonne: [
-      { slug: 'macchinari', titolo: 'Macchinari', voci: [
+      { titolo: 'Macchinari', voci: [
         { testo: 'Centrifughe', href: 'centrifughe.html' },
         { testo: 'Impianti', href: 'impianti.html' },
         { testo: 'Trituratori', href: 'trituratori.html' },
       ] },
-      { slug: 'azienda', titolo: 'Azienda', voci: [
+      { titolo: 'Azienda', voci: [
         { testo: 'Chi siamo', href: 'azienda.html' },
         { testo: 'News', href: 'news.html' },
       ] },

@@ -119,38 +119,54 @@ function sezioneSedi() {
   </section>`;
 }
 
+// Tre colonne e una riga di chiusura. Le intestazioni non ci sono piu: con due
+// o tre voci per colonna erano impalcatura, e il gruppo si legge senza. Restano
+// pero come aria-label sui <nav>, se no chi ascolta la pagina trova due elenchi
+// di link senza sapere di cosa.
+//
+// L'indirizzo non e un elenco puntato ma un <address>, ed e li che vive la sola
+// cosa in evidenza di tutto il piede: l'email. Il resto sta in secondo piano.
 function piePagina() {
   const a = DATI.azienda;
   return `
 <footer class="site-footer">
   <div class="site-footer__inner">
 
-    <nav class="quick-links" aria-label="Collegamenti rapidi">
-      <ul>${DATI.footer.rapidi.map((v) => `<li><a href="${percorso(v.href)}">${v.testo}</a></li>`).join('')}</ul>
-    </nav>
-
     <div class="footer-columns">
-      ${colonnaFooter('azienda-claim', "Riguardo l'azienda", `<p class="footer-column__claim">${a.claim}</p>`)}
-      ${colonnaFooter('contatti', 'Contatti', indirizzoFooter())}
-      ${DATI.footer.colonne.map((c) => colonnaFooter(c.slug, c.titolo, elencoLink(c.voci))).join('')}
+
+      <div class="footer-column">
+        <address class="footer-recapiti">
+          ${a.via}<br>
+          ${a.citta}<br>
+          ${a.paese}
+        </address>
+        <p class="footer-recapiti">
+          T. <a href="${a.telefonoHref}">${a.telefono}</a><br>
+          F. ${a.fax}
+        </p>
+        <a class="footer-email" href="mailto:${a.email}">${a.email}</a>
+      </div>
+
+      ${DATI.footer.colonne.map((c) => `
+      <nav class="footer-column" aria-label="${c.titolo}">
+        ${elencoLink(c.voci)}
+      </nav>`).join('')}
+
     </div>
 
     <hr class="site-footer__divider">
 
-    <ul class="social-links" aria-label="Seguici sui social">
-      <li>
-        <a href="${a.facebook}" target="_blank" rel="noopener" aria-label="Facebook, si apre in una nuova scheda">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M14.5 7.5h-1.8a2.2 2.2 0 00-2.2 2.2V19M8.2 12.6h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
-          </svg>
-        </a>
-      </li>
-    </ul>
-
-    <nav class="legal-links" aria-label="Informazioni legali">
-      <ul>${DATI.footer.legali.map((v) => `<li><a href="${percorso(v.href)}">${v.testo}</a></li>`).join('')}</ul>
-    </nav>
+    <div class="site-footer__coda">
+      <a class="footer-social" href="${a.facebook}" target="_blank" rel="noopener" aria-label="Facebook, si apre in una nuova scheda">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M14.5 7.5h-1.8a2.2 2.2 0 00-2.2 2.2V19M8.2 12.6h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+        </svg>
+      </a>
+      <nav class="legal-links" aria-label="Informazioni legali">
+        <ul>${DATI.footer.legali.map((v) => `<li><a href="${percorso(v.href)}">${v.testo}</a></li>`).join('')}</ul>
+      </nav>
+    </div>
 
     <p class="site-footer__copyright">Copyright © 2026 ${a.nome} — ${a.legale}</p>
 
@@ -193,33 +209,7 @@ function fasciaMarchio() {
 </div>`;
 }
 
-function colonnaFooter(slug, titolo, contenuto) {
-  return `
-      <section class="footer-column" data-footer-column>
-        <h2 class="footer-column__heading">
-          <button class="disclosure" type="button" aria-expanded="true" aria-controls="footer-${slug}" data-footer-toggle>
-            ${titolo}
-            ${icona('M6 9l6 6 6-6', 'disclosure__chevron')}
-          </button>
-        </h2>
-        <div class="footer-column__panel" id="footer-${slug}" data-footer-panel>${contenuto}</div>
-      </section>`;
-}
 
-function indirizzoFooter() {
-  const a = DATI.azienda;
-  return `
-          <address class="footer-column__address">
-            ${a.via}<br>
-            ${a.citta}<br>
-            ${a.paese}
-            <span class="footer-column__contacts">
-              T. <a href="${a.telefonoHref}">${a.telefono}</a><br>
-              F. ${a.fax}<br>
-              <a href="mailto:${a.email}">${a.email}</a>
-            </span>
-          </address>`;
-}
 
 function elencoLink(voci) {
   return `<ul class="footer-column__links">${voci.map((v) => `<li><a href="${percorso(v.href)}">${v.testo}</a></li>`).join('')}</ul>`;

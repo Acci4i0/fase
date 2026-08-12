@@ -5,7 +5,6 @@ const CARDS_VISIBLE_ON_TABLET = 2;
 const CARDS_VISIBLE_ON_DESKTOP = 3;
 const TABLET_QUERY = '(min-width: 768px)';
 const DESKTOP_QUERY = '(min-width: 1200px)';
-const MOBILE_QUERY = '(max-width: 767px)';
 
 document.addEventListener('DOMContentLoaded', startPage);
 
@@ -13,7 +12,6 @@ function startPage() {
   addShadowToHeaderOnScroll();
   showScrollProgress();
   enableNavigationOverlay();
-  enableFooterAccordions();
   startHeroCarousel();
   startSystemCarousel();
   enableSystemPanels();
@@ -266,31 +264,6 @@ function enableNavigationOverlay() {
   }
 }
 
-function enableFooterAccordions() {
-  const columns = [...document.querySelectorAll('[data-footer-column]')];
-  const mobileQuery = window.matchMedia(MOBILE_QUERY);
-
-  enableDisclosures(document.querySelectorAll('[data-footer-toggle]'));
-  applyLayout();
-  mobileQuery.addEventListener('change', applyLayout);
-
-  function applyLayout() {
-    columns.forEach(mobileQuery.matches ? makeColumnCollapsible : keepColumnOpen);
-  }
-
-  function makeColumnCollapsible(column) {
-    const toggle = column.querySelector('[data-footer-toggle]');
-    toggle.disabled = false;
-    setDisclosureExpanded(toggle, false);
-  }
-
-  function keepColumnOpen(column) {
-    const toggle = column.querySelector('[data-footer-toggle]');
-    findDisclosurePanel(toggle).hidden = false;
-    toggle.removeAttribute('aria-expanded');
-    toggle.disabled = true;
-  }
-}
 
 function startHeroCarousel() {
   const hero = document.querySelector('.hero');
