@@ -1598,9 +1598,23 @@ address {
   background: var(--color-surface);
 }
 
+/* Il deposito del <symbol>: non si vede e non occupa spazio, ma non puo essere
+   display:none, se no in qualche motore <use> non lo trova piu. */
+
+.fascia__deposito {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .fascia__nastro {
   display: flex;
-  align-items: center;
+  /* Sulla linea di base, non al centro: per un elemento rimpiazzato la linea di
+     base e il suo bordo inferiore, quindi il marchio vi si appoggia da solo. Con
+     l'altezza pari a quella delle maiuscole, la sua cima cade sulla loro cima
+     senza nessuno scostamento da tarare a mano. */
+  align-items: baseline;
   width: max-content;
   animation: fascia-scorre 72s linear infinite;
 }
@@ -1620,20 +1634,25 @@ address {
 }
 
 /* Il marchio chiude ogni unita del giro.
-   Nell'asset l'ovale occupa le righe 0-68 di 87, cioe il 79% dell'altezza, e
-   la tagline pende sotto: il centro dell'ovale cade al 39,7% del riquadro, non
-   a meta. L'occhio legge l'ovale, quindi e su quello che si tara tutto — se si
-   centrasse il riquadro il marchio sembrerebbe appeso.
-   Altezza: 0.662em di maiuscola diviso 0,79 fa 0.84em, cosi l'ovale e alto
-   quanto le maiuscole. Lo scostamento verticale riporta il centro dell'ovale
-   su quello delle maiuscole ed e verificato sui pixel resi. */
+   Il viewBox e stretto sull'inchiostro, quindi il riquadro dell'elemento e la
+   forma coincidono: l'altezza si puo pareggiare direttamente a quella delle
+   maiuscole, 0.662em misurata sul font, e la larghezza segue la proporzione
+   del solo marchio. Niente vuoto ereditato dal payoff, niente scostamenti.
+   Le distanze sono agganciate allo spazio fra le parole del marquee, che
+   misura 0.200em, ma il margine non e il vuoto che si vede: a destra l'ovale
+   finisce in curva e arretra dal bordo del riquadro di circa 0.075em, a
+   sinistra di circa 0.03em. I margini sono quei valori tolti dal vuoto voluto
+   — uno spazio-parola prima, uno e un sesto dopo — cosi otticamente il
+   marchio sta nel ritmo delle parole invece di aprire un buco. */
 
-.fascia__logo {
+.fascia__marchio {
+  --marchio-alt: 0.662em;
+
   flex: none;
-  height: 0.84em;
-  width: auto;
-  margin-inline: 0.26em 0.34em;
-  transform: translateY(0.075em);
+  height: var(--marchio-alt);
+  width: calc(var(--marchio-alt) * 2.1727);
+  margin-inline: 0.17em 0.16em;
+  fill: var(--color-ink);
 }
 
 /* Due meta identiche, quindi -50% e esattamente la larghezza della prima: a

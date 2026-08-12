@@ -166,16 +166,29 @@ function piePagina() {
 // trova esattamente dove stava la prima, quindi il raccordo non esiste come
 // momento. Perche non si apra un vuoto a destra, una meta deve essere piu larga
 // dello schermo: due ripetizioni bastano dai 320px ai 2560px, verificato.
-// L'unita che si ripete e nome + marchio, ed e sempre la stessa: il logo e
-// quello dell'intestazione, non un ridisegno. alt vuoto perche la fascia e gia
-// nascosta ai lettori di schermo e il marchio qui non aggiunge informazione.
+// L'unita che si ripete e nome + marchio. Il marchio e senza payoff: quello del
+// lockup direbbe "MECHANICAL ENGINEERING" a un dito dalla stessa parola scritta
+// in grande, e il ritmo del giro si romperebbe.
+//
+// SVG in linea e non <img> perche il colore deve essere lo stesso nero del
+// testo: con fill impostato dal CSS il marchio prende --color-ink per
+// costruzione, mentre un filtro sul PNG darebbe #000 e non #111. La geometria
+// sta in un <symbol> emesso una volta sola; le quattro unita lo richiamano con
+// <use>, quindi nel documento i tracciati non si ripetono.
 function fasciaMarchio() {
   const a = DATI.azienda;
+  const m = a.marchio;
   const unita = `<span class="fascia__voce">${a.nome}</span>`
-    + `<img class="fascia__logo" src="${percorso(a.logo)}" alt="" width="232" height="87">`;
+    + '<svg class="fascia__marchio" aria-hidden="true" focusable="false">'
+    + '<use href="#fascia-marchio"></use></svg>';
   const meta = unita.repeat(RIPETIZIONI_FASCIA);
   return `
 <div class="fascia" aria-hidden="true">
+  <svg class="fascia__deposito" aria-hidden="true" focusable="false">
+    <symbol id="fascia-marchio" viewBox="${m.viewBox}">
+      ${m.tracciati.map((d) => `<path d="${d}"/>`).join('\n      ')}
+    </symbol>
+  </svg>
   <div class="fascia__nastro">${meta}${meta}</div>
 </div>`;
 }
