@@ -108,7 +108,8 @@ function sezioneSedi() {
           <span class="locations__company">${a.ragioneSociale}</span>
           ${a.via}<br>
           ${a.citta}<br>
-          Telefono ${a.telefono}<br>
+          T. ${a.telefono}<br>
+          F. ${a.fax}<br>
           ${a.email}
         </address>
       </div>
@@ -119,13 +120,15 @@ function sezioneSedi() {
   </section>`;
 }
 
-// Tre colonne e una riga di chiusura. Le intestazioni non ci sono piu: con due
-// o tre voci per colonna erano impalcatura, e il gruppo si legge senza. Restano
-// pero come aria-label sui <nav>, se no chi ascolta la pagina trova due elenchi
-// di link senza sapere di cosa.
+// Due colonne di link e una riga di chiusura. I recapiti non stanno piu qui:
+// erano gli stessi della sezione Sedi, che sulla home la precede di poco. Nelle
+// pagine senza Sedi la via al contatto resta il link Contatti nella colonna
+// Azienda.
 //
-// L'indirizzo non e un elenco puntato ma un <address>, ed e li che vive la sola
-// cosa in evidenza di tutto il piede: l'email. Il resto sta in secondo piano.
+// Le intestazioni non ci sono: con due o tre voci per colonna erano
+// impalcatura, e il gruppo si legge senza. Restano pero come aria-label sui
+// <nav>, se no chi ascolta la pagina trova due elenchi di link senza sapere di
+// cosa.
 function piePagina() {
   const a = DATI.azienda;
   return `
@@ -133,25 +136,10 @@ function piePagina() {
   <div class="site-footer__inner">
 
     <div class="footer-columns">
-
-      <div class="footer-column">
-        <address class="footer-recapiti">
-          ${a.via}<br>
-          ${a.citta}<br>
-          ${a.paese}
-        </address>
-        <p class="footer-recapiti">
-          T. <a href="${a.telefonoHref}">${a.telefono}</a><br>
-          F. ${a.fax}
-        </p>
-        <a class="footer-email" href="mailto:${a.email}">${a.email}</a>
-      </div>
-
       ${DATI.footer.colonne.map((c) => `
       <nav class="footer-column" aria-label="${c.titolo}">
         ${elencoLink(c.voci)}
       </nav>`).join('')}
-
     </div>
 
     <hr class="site-footer__divider">

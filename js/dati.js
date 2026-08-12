@@ -68,6 +68,7 @@ const DATI = {
       { titolo: 'Azienda', voci: [
         { testo: 'Chi siamo', href: 'azienda.html' },
         { testo: 'News', href: 'news.html' },
+        { testo: 'Contatti', href: 'contatti.html' },
       ] },
     ],
     legali: [
