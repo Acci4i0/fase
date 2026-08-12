@@ -166,9 +166,14 @@ function piePagina() {
 // trova esattamente dove stava la prima, quindi il raccordo non esiste come
 // momento. Perche non si apra un vuoto a destra, una meta deve essere piu larga
 // dello schermo: due ripetizioni bastano dai 320px ai 2560px, verificato.
+// L'unita che si ripete e nome + marchio, ed e sempre la stessa: il logo e
+// quello dell'intestazione, non un ridisegno. alt vuoto perche la fascia e gia
+// nascosta ai lettori di schermo e il marchio qui non aggiunge informazione.
 function fasciaMarchio() {
-  const voce = `<span class="fascia__voce">${DATI.azienda.nome}</span>`;
-  const meta = voce.repeat(RIPETIZIONI_FASCIA);
+  const a = DATI.azienda;
+  const unita = `<span class="fascia__voce">${a.nome}</span>`
+    + `<img class="fascia__logo" src="${percorso(a.logo)}" alt="" width="232" height="87">`;
+  const meta = unita.repeat(RIPETIZIONI_FASCIA);
   return `
 <div class="fascia" aria-hidden="true">
   <div class="fascia__nastro">${meta}${meta}</div>

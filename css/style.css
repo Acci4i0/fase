@@ -1583,41 +1583,57 @@ address {
    tagliate. Decorativa: il nome e gia nell'intestazione e nel piede. */
 
 .fascia {
-  /* La misura di tutto sta qui: altezza, spaziature e taglio sono in em, e
-     seguono questo unico valore. 15vw riempie la fascia a ogni larghezza
-     senza che serva un breakpoint. */
-  font-size: clamp(76px, 15vw, 260px);
-  /* Poco piu bassa delle maiuscole, che qui misurano 0.662em: sotto se ne
-     perde un'unghia e il resto si legge tutto. A 0.56em ne restava fuori
-     quasi un quarto e la parola sembrava mozzata invece che tagliata dal
-     bordo. E lo stesso overflow che trattiene il nastro, largo piu della
-     pagina, senza che compaia una barra di scorrimento orizzontale. */
-  height: 0.63em;
+  /* La misura di tutto sta qui: altezza della fascia, del marchio e delle
+     spaziature sono in em e seguono questo unico valore. 9.3vw riempie a ogni
+     larghezza senza che serva un breakpoint. La scala e piu bassa di prima
+     perche ora il testo ci sta dentro tutto invece di sfondare il bordo: e la
+     ripetizione a riempire la larghezza, non la dimensione del singolo glifo. */
+  font-size: clamp(52px, 9.3vw, 160px);
+  /* Aria sopra e sotto. L'altezza resta automatica: la fascia si adatta al
+     contenuto, e nessun glifo puo restare tagliato. */
+  padding-block: 0.13em;
+  /* Trattiene il nastro, largo piu della pagina, senza che compaia una barra
+     di scorrimento orizzontale. Verticalmente non taglia piu niente. */
   overflow: hidden;
   background: var(--color-surface);
 }
 
 .fascia__nastro {
   display: flex;
+  align-items: center;
   width: max-content;
-  /* Alza le maiuscole verso il bordo alto: sopra resta un filo d'aria, sotto
-     il taglio. Il valore e empirico — con line-height 1 le maiuscole non
-     partono dal bordo della riga — ed e verificato sui pixel resi. */
-  margin-top: -0.115em;
   animation: fascia-scorre 72s linear infinite;
 }
 
 .fascia__voce {
   color: var(--color-ink);
   font-weight: 900;
-  line-height: 1;
+  /* Contiene la cassa del font per intero, ascendenti e discendenti comprese:
+     con line-height 1 i glifi sbordavano dalla riga. */
+  line-height: 1.26;
   /* Il tracking delle etichette (0.12em) qui sfalderebbe la parola: a scala
      display le lettere vanno strette, se no il nome non si legge come un
      blocco unico. */
   letter-spacing: var(--tracking-display);
   text-transform: uppercase;
   white-space: nowrap;
-  padding-inline-end: 0.24em;
+}
+
+/* Il marchio chiude ogni unita del giro.
+   Nell'asset l'ovale occupa le righe 0-68 di 87, cioe il 79% dell'altezza, e
+   la tagline pende sotto: il centro dell'ovale cade al 39,7% del riquadro, non
+   a meta. L'occhio legge l'ovale, quindi e su quello che si tara tutto — se si
+   centrasse il riquadro il marchio sembrerebbe appeso.
+   Altezza: 0.662em di maiuscola diviso 0,79 fa 0.84em, cosi l'ovale e alto
+   quanto le maiuscole. Lo scostamento verticale riporta il centro dell'ovale
+   su quello delle maiuscole ed e verificato sui pixel resi. */
+
+.fascia__logo {
+  flex: none;
+  height: 0.84em;
+  width: auto;
+  margin-inline: 0.26em 0.34em;
+  transform: translateY(0.075em);
 }
 
 /* Due meta identiche, quindi -50% e esattamente la larghezza della prima: a
