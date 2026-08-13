@@ -504,6 +504,54 @@ address {
   background-size: 16px 16px;
 }
 
+/* Striscia fotografica. Tocca i due bordi della viewport ed e l'overflow a
+   trattenere il nastro, piu largo della pagina, senza che compaia una barra di
+   scorrimento orizzontale.
+
+   La carta e quadrata per larghezza e altezza esplicite, non con aspect-ratio:
+   un quadrato non ne ha bisogno e cosi funziona anche sui Safari piu vecchi.
+   Cresce poco e con un tetto: su telefono resta piccola e se ne vedono tre
+   intere, su schermo largo se ne vedono sette senza che diventino manifesti. */
+
+.striscia {
+  /* A 320px, la larghezza peggiore, una carta piu il suo spazio deve stare
+     tre volte nello schermo: 92 + 10 fa 102, e 320 ne contiene tre intere. */
+  --carta: clamp(92px, 12vw, 200px);
+  --carta-spazio: clamp(10px, 1.6vw, 24px);
+
+  overflow: hidden;
+  padding-block: var(--carousel-padding-block);
+  background: var(--color-page);
+}
+
+.striscia__nastro {
+  display: flex;
+  width: max-content;
+  animation: striscia-scorre 50s linear infinite;
+}
+
+/* Lo spazio sta sulla carta, non fra le carte: col gap i vuoti sarebbero uno in
+   meno delle carte e il -50% non cadrebbe sul giunto. */
+
+.striscia__carta {
+  flex: none;
+  width: var(--carta);
+  height: var(--carta);
+  margin-inline-end: var(--carta-spazio);
+  background: var(--color-ink);
+}
+
+@keyframes striscia-scorre {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .striscia__nastro {
+    animation: none;
+  }
+}
+
 /* Foto, testo e riga di controllo formano un'unica colonna centrata a ogni
    larghezza. Le frecce affiancano i puntini: la fascia dei controlli è una riga
    a tre colonne e display:contents scioglie il contenitore delle frecce, così i

@@ -1,3 +1,8 @@
+// Carte per meta nella striscia fotografica di Azienda. Va dichiarata qui: il
+// montaggio della pagina parte subito sotto, e una const letta piu in basso nel
+// file non sarebbe ancora inizializzata.
+const CARTE_STRISCIA = 12;
+
 riempiPagina();
 
 function riempiPagina() {
@@ -430,6 +435,7 @@ function paginaAzienda() {
       </div>
       ${media(p.immagine, p.placeholder, 'media--hero testata__foto', true)}
     </div>`)
+    + strisciaFotografica()
     + fasciaPunteggiata(`
     <div class="section">
       <ul class="pilastri">
@@ -437,6 +443,28 @@ function paginaAzienda() {
       </ul>
       ${percorsiSistemi()}
     </div>`);
+}
+
+// Striscia fotografica fra la foto dello stabilimento e i tre punti numerati.
+// Stessa meccanica della fascia col nome in fondo alla home: due meta identiche
+// e una traslazione di -50%, cioe esattamente la larghezza della prima, cosi al
+// riavvolgimento la seconda si trova dove stava la prima e il giro non ha un
+// momento di stacco. Lo spazio fra le carte non e un gap ma un margine su
+// ciascuna: col gap i vuoti sarebbero 2N-1 e la meta non cadrebbe sul giunto.
+//
+// Dodici carte per meta: a 2560, la larghezza peggiore, una carta piu il suo
+// spazio misura 224px e dodici bastano a coprire lo schermo, quindi non si apre
+// mai un vuoto a destra.
+//
+// Per ora sono riquadri vuoti e non dicono nulla, quindi restano fuori
+// dall'ordine di lettura. Quando arriveranno le foto andra tolto aria-hidden e
+// dato un alt a ciascuna.
+function strisciaFotografica() {
+  const meta = '<div class="striscia__carta"></div>'.repeat(CARTE_STRISCIA);
+  return `
+  <div class="striscia" aria-hidden="true">
+    <div class="striscia__nastro">${meta}${meta}</div>
+  </div>`;
 }
 
 // Un blocco per sezione, numerato. Il numero e il filetto rosso sono lo stesso
