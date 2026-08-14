@@ -469,12 +469,30 @@ function strisciaFotografica() {
 
 // Un blocco per sezione, numerato. Il numero e il filetto rosso sono lo stesso
 // segno che marca i titoli sul retro delle card di Applicazioni e Settori.
+//
+// E un <details> nativo: su telefono si apre e si chiude senza una riga di
+// JavaScript, e la prima parte aperta. Nell'intestazione, sempre in vista, il
+// numero, il titolo e una riga di aggancio col dato concreto del blocco — cosi
+// i tre si scorrono con un colpo d'occhio invece di occupare tre schermate.
+// Nel markup sono aperti tutti e tre, ed e main.js a chiuderne due sotto i
+// 768px. Il verso conta: senza JavaScript il contenuto resta tutto visibile e
+// il desktop e identico a prima, invece di dipendere da uno script per aprirsi.
 function pilastro(sezione, indice) {
   return `
-        <li class="pilastro" data-reveal>
-          <p class="pilastro__numero">${String(indice + 1).padStart(2, '0')}</p>
-          <h2 class="pilastro__titolo">${sezione.titolo}</h2>
-          ${sezione.paragrafi.map((t) => `<p class="pilastro__testo">${t}</p>`).join('')}
+        <li data-reveal>
+          <details class="pilastro" data-pilastro open>
+            <summary class="pilastro__testata">
+              <span class="pilastro__numero">${String(indice + 1).padStart(2, '0')}</span>
+              <div class="pilastro__intestazione">
+                <h2 class="pilastro__titolo">${sezione.titolo}</h2>
+                <p class="pilastro__aggancio">${sezione.aggancio}</p>
+              </div>
+              ${icona('M6 9l6 6 6-6', 'pilastro__chevron')}
+            </summary>
+            <div class="pilastro__corpo">
+              ${sezione.paragrafi.map((t) => `<p class="pilastro__testo">${t}</p>`).join('')}
+            </div>
+          </details>
         </li>`;
 }
 

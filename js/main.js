@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', startPage);
 function startPage() {
   addShadowToHeaderOnScroll();
   showScrollProgress();
+  enableAziendaAccordions();
   enableNavigationOverlay();
   startHeroCarousel();
   startSystemCarousel();
@@ -190,6 +191,25 @@ function addShadowToHeaderOnScroll() {
 
   syncShadow();
   window.addEventListener('scroll', syncShadow, { passive: true });
+}
+
+// I blocchi 01/02/03 della pagina Azienda sono <details> nativi: aprirli e
+// chiuderli non richiede JavaScript. Qui si fa solo una cosa, ed e per la
+// densita su telefono: sotto i 768px si lascia aperto il primo e si chiudono
+// gli altri due, cosi i tre si scorrono con un colpo d'occhio invece di
+// occupare tre schermate. Sopra i 768 tornano tutti aperti, come erano.
+//
+// Il markup li dichiara gia aperti: senza questo script il contenuto resta
+// tutto visibile, e il desktop non dipende da JavaScript per essere corretto.
+function enableAziendaAccordions() {
+  const blocchi = [...document.querySelectorAll('[data-pilastro]')];
+  if (!blocchi.length) return;
+
+  const telefono = window.matchMedia('(max-width: 767px)');
+  const applica = () => blocchi.forEach((b, i) => { b.open = !telefono.matches || i === 0; });
+
+  applica();
+  telefono.addEventListener('change', applica);
 }
 
 function showScrollProgress() {

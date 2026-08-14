@@ -738,6 +738,7 @@ const DATI = {
       sezioni: [
         {
           titolo: 'Dal truciolo al valore',
+          aggancio: 'Umidità residua sotto il 2%',
           paragrafi: [
             'Ogni chilo di lubrorefrigerante che resta nel truciolo \u00e8 un costo due volte: \u00e8 fluido da '
             + 'riacquistare ed \u00e8 peso che abbassa il prezzo dello sfrido. I nostri impianti portano '
@@ -749,6 +750,7 @@ const DATI = {
         },
         {
           titolo: 'Ogni impianto nasce da un reparto preciso',
+          aggancio: 'Test sullo sfrido reale del cliente',
           paragrafi: [
             'Non partiamo da un catalogo chiuso. Un progetto comincia dalla misura degli spazi, dal materiale '
             + 'da trattare e dal volume di sfrido che il reparto produce: da l\u00ec nascono il layout della linea e '
@@ -760,6 +762,7 @@ const DATI = {
         },
         {
           titolo: 'Il rapporto non finisce alla consegna',
+          aggancio: 'Dal progetto al collaudo',
           paragrafi: [
             'Il team tecnico segue l\u2019impianto dalla preparazione del progetto fino al collaudo, e prosegue '
             + 'con controlli e manutenzioni programmate. Sugli impianti a ciclo continuo la teleassistenza da '
