@@ -95,7 +95,7 @@ const DATI = {
       titolo: 'Linee di trattamento truciolo',
       testo: 'Layout costruito sugli spazi reali, dal carico allo stoccaggio.',
       cta: { testo: 'Vedi gli impianti', href: 'impianti.html' },
-      placeholder: 'impianto Fase a paniere estraibile: portale su tre panieri separati, alimentati dalla tramoggia del truciolo',
+      placeholder: 'impianto Fase a ciclo continuo: tramoggia di carico, elevatore verso la centrifuga, cassone di raccolta e cisterna del lubrorefrigerante',
       immagine: 'img/hero/03-linea-trattamento.jpg',
     },
     {
@@ -556,11 +556,11 @@ const DATI = {
       slug: 'impianti',
       immagine: 'img/su-grigio/cop-impianti.jpg',
       copertina: 'img/hero/03-linea-trattamento.jpg',
-      copertinaPlaceholder: 'impianto Fase a paniere estraibile: portale su tre panieri separati, alimentati dalla tramoggia del truciolo',
+      copertinaPlaceholder: 'impianto Fase a ciclo continuo: tramoggia di carico, elevatore verso la centrifuga, cassone di raccolta e cisterna del lubrorefrigerante',
       pagina: 'impianti.html',
       nome: 'Impianti',
       sommario: 'Linee automatiche di trattamento e asciugatura',
-      placeholder: 'impianto Fase a paniere estraibile: portale su tre panieri separati, alimentati dalla tramoggia del truciolo',
+      placeholder: 'impianto Fase completo: cabina di comando, tramoggia conica, elevatore e centrifuga dentro la recinzione',
       intro: 'Linee complete che collegano macchina utensile, trattamento dello sfrido e stoccaggio, dimensionate sul reparto.',
       macchinari: [
         {
@@ -640,7 +640,7 @@ const DATI = {
       pagina: 'trituratori.html',
       nome: 'Trituratori',
       sommario: 'Frantumazione di trucioli lunghi e matassosi',
-      placeholder: 'trituratore Fase compatto ad asse orizzontale con tramoggia di carico',
+      placeholder: 'trituratore Fase ad asse verticale, tramoggia di carico e motore laterale',
       intro: 'Riducono il volume della matassa prima della centrifugazione e semplificano stoccaggio e trasporto.',
       macchinari: [
         {
