@@ -1,6 +1,31 @@
 # macOS
 .DS_Store
 
+# HyperFrames: le skill copiate da github.com/heygen-com/hyperframes (~4 MB di
+# materiale di terzi) e il lock di skills.sh. Si rimettono con
+#   npx skills add heygen-com/hyperframes -a claude-code -s <nome> -y
+.claude/
+skills-lock.json
+
+# I filmati renderizzati: pesanti e rigenerabili dalla composizione HTML, che
+# invece resta versionata in video/.
+video/**/out/
+video/**/renders/
+video/**/*.mp4
+video/**/*.webm
+video/**/*.mov
+video/**/node_modules/
+
+# Eccezione: il video hero della home NON è un render di lavorazione, è un asset
+# pubblicato che le pagine richiamano. Va versionato e deve arrivare in deploy.
+!video/hero/
+!video/hero/*.mp4
+!video/hero/*.jpg
+
+# Cartella di lavorazione del video hero: frame estratti, shot intermedi,
+# generati e master. Tutto rigenerabile da build/bin/ e dai sorgenti.
+build/
+
 # Il sito è HTML/CSS/JS puro e non ha un passo di build: si apre aprendo
 # index.html. package.json e vite erano un tentativo abbandonato e non sono
 # referenziati da nessuna pagina.
@@ -8,20 +33,17 @@ node_modules/
 package.json
 package-lock.json
 
-# Originali fotografici ad alta risoluzione (≈ 58 MB). Nel sito entrano le
-# versioni web derivate, che stanno in img/soluzioni/.
-img/settori/
-img/applicazioni/
-
-# Libreria fotografica del committente (≈ 40 MB di PNG a nome UUID) più i
-# render CAD scaricati da fasemec.com. Servono come archivio di lavoro; nel
-# sito entrano le versioni rimontate su grigio in img/su-grigio/.
-# Le poche usate direttamente sono escluse dall'esclusione qui sotto.
-img/immagini/*
-!img/immagini/IMG2-6.jpg
-!img/immagini/IMG3-6.jpg
-!img/immagini/sede-fase.jpg
-!img/immagini/trituratori-verticali.jpg
+# img/ è versionata per intero: non solo le immagini che le pagine richiamano,
+# ma anche l'archivio di lavorazione — originali ad alta risoluzione
+# (settori/, applicazioni/), libreria del committente (immagini/), riprese di
+# stabilimento (foto:video_tutto/) e scarti delle iterazioni precedenti.
+# Sono circa 650 MB, e quel peso resta nella storia del repository anche se un
+# domani le cartelle venissero tolte: ogni clone se lo porta dietro.
+#
+# Unica eccezione, e non per scelta: GitHub rifiuta in blocco qualsiasi push
+# che contenga un file oltre i 100 MB, e questa ripresa ne pesa 149. Resta in
+# locale. Per versionarla servirebbe Git LFS, che qui non è installato.
+img/foto:video_tutto/Trituratori_TR4-6-7/VID_TR7-30IDRO.mp4
 
 # Fotografie di riferimento raccolte in fase di studio, mai finite in pagina.
 # Includono materiale di banche immagini con licenza propria.
@@ -30,45 +52,3 @@ trucioli/
 # Appunti di studio su un sito di terzi, con estratti del suo codice: materiale
 # di lavoro, non parte del prodotto. Resta in locale.
 ANALYSIS.md
-
-# Immagini superate dalle iterazioni precedenti: nessuna pagina le richiama
-# più. Restano sul disco come archivio, fuori dal repository.
-#
-# Le nove qui sotto col nome originale di fasemec.com (FC.jpg, imgDK.jpg,
-# SEZIONE-CENTRIFUGHE-FD.jpg…) sono le immagini che il sito ufficiale pubblica
-# per ciascun modello. Non entrano più in pagina — sono render poveri — ma
-# restano in locale: sono la prova di quale macchina sia quale, cioè il
-# riferimento con cui vengono attribuiti i render del committente.
-img/su-grigio/FC.jpg
-img/su-grigio/FCV480.jpg
-img/su-grigio/imgDK.jpg
-img/su-grigio/SEZIONE-CENTRIFUGHE-FD.jpg
-img/su-grigio/IMP-a-ciclo-continuo.jpg
-img/su-grigio/IMP-a-paniere-estraibile2.jpg
-img/su-grigio/trattamento-truciolo-imp.jpg
-img/su-grigio/trituratore-orizzontale.jpg
-img/su-grigio/trituratori-verticali.jpg
-#
-# Attribuzioni ritirate: assegnate per somiglianza di sagoma, senza riscontro.
-img/hero/02-disoleatrice-ciclo-continuo.jpg
-img/su-grigio/fd-ciclo-continuo.jpg
-img/su-grigio/fc-cesto-estraibile.jpg
-img/su-grigio/fcv-verticale.jpg
-img/su-grigio/dk-cesto-estraibile.jpg
-img/su-grigio/imp-ciclo-continuo.jpg
-img/su-grigio/imp-paniere-estraibile.jpg
-img/su-grigio/imp-galvanico.jpg
-img/su-grigio/tr-orizzontale.jpg
-img/su-grigio/trw-verticale.jpg
-img/su-grigio/centrifuga.jpg
-img/su-grigio/disoleatrice-ciclo-continuo.jpg
-img/su-grigio/app-asciugatura.jpg
-img/su-grigio/app-frantumazione.jpg
-img/su-grigio/app-linea.jpg
-img/su-grigio/set-galvanica.jpg
-img/su-grigio/set-officina.jpg
-img/su-grigio/set-torneria.jpg
-
-# Sorgente ad alta risoluzione da cui e stato ricalcato img/logo-fase.svg.
-# Non serve al sito: resta in locale come provenienza del ricalco.
-img/logo_vettoriale.PNG
